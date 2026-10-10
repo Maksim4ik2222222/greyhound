@@ -1,0 +1,1767 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("greyhound-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(_){}</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Аренда рекламных щитов 6×3 в Кирове. Рекламная компания «Грейхаунд» с 2000 года. Онлайн-бронирование по месяцам.">
+<title>Щиты Грейхаунд — аренда рекламных щитов 6×3 в Кирове</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: монохромный «макет щита» — герой-щит 2:1, затем таблица занятости сторон по месяцам, история, контакты */
+:root{
+  --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line:#d9d9d9; --soft:#f2f2f2; --ink:#0a0a0a; --paper:#ffffff;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --tiles:grayscale(1);
+  --glow:rgba(255,255,255,0);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0b0b;--fg:#f4f4f4;--muted:#9a9a9a;--line:#2e2e2e;--soft:#161616;--ink:#f4f4f4;--paper:#0b0b0b;--tiles:grayscale(1) invert(1) brightness(.88) contrast(.92);--glow:rgba(255,255,255,.42);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b0b0b;--fg:#f4f4f4;--muted:#9a9a9a;--line:#2e2e2e;--soft:#161616;--ink:#f4f4f4;--paper:#0b0b0b;--tiles:grayscale(1) invert(1) brightness(.88) contrast(.92);--glow:rgba(255,255,255,.42);color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:900;font-size:18px;letter-spacing:.02em;text-decoration:none}
+.logo small{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--muted);margin-left:8px;letter-spacing:.08em}
+nav{display:flex;gap:20px;flex-wrap:wrap}
+nav a{text-decoration:none;font-size:14px;color:var(--muted)}
+nav a:hover{color:var(--fg)}
+.theme-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--fg);background:var(--bg);color:var(--fg);padding:7px 12px;cursor:pointer;font-size:13px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.theme-btn:hover{background:var(--fg);color:var(--bg)}
+.theme-dot{width:12px;height:12px;border-radius:50%;border:1px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+body,header.top,.board .face,.cell,.chip,.cta{transition:background-color .2s,color .2s,border-color .2s}
+
+/* stage: щит-призматрон. При прокрутке планки поворачиваются, затем «камера» наезжает на постер */
+.stage{height:360vh;position:relative;border-top:0;padding:0}
+.stage-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--bg)}
+.sky{position:absolute;inset:0;will-change:transform}
+.sky canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scene{position:absolute;left:50%;top:42%;width:min(80vw,900px);translate:-50% -50%;transform-origin:50% 50%;will-change:transform}
+.bb-frame{position:relative;aspect-ratio:2/1;border:clamp(4px,.7vw,8px) solid var(--fg);background:#0a0a0a}
+.bb-face{position:absolute;inset:0;display:flex;perspective:1800px;overflow:hidden}
+.slat{position:relative;flex:1 0 0;height:100%;transform-style:preserve-3d}
+.pf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background-repeat:no-repeat}
+.bb-deck{position:absolute;left:-3%;right:-3%;top:100%;margin-top:8px;height:12px;border:2px solid var(--fg);border-top-width:3px;background:repeating-linear-gradient(90deg,var(--fg) 0 2px,transparent 2px 16px)}
+.bb-pole{position:absolute;left:50%;top:100%;margin-top:22px;width:clamp(16px,2.6vw,30px);height:40vh;translate:-50% 0;background:var(--fg)}
+.lamps{position:absolute;left:10%;right:10%;bottom:100%;margin-bottom:6px;display:flex;justify-content:space-between}
+.lamps i{width:clamp(18px,2.4vw,30px);height:clamp(8px,1vw,12px);background:var(--fg);position:relative}
+.lamps i::before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:14px;background:var(--fg)}
+.lamps i::after{content:"";position:absolute;left:50%;top:100%;width:min(26vw,260px);height:min(20vw,190px);translate:-50% 0;background:radial-gradient(ellipse at 50% 0,var(--glow),transparent 70%);pointer-events:none}
+.stage-ui{position:absolute;left:0;right:0;bottom:24px;display:flex;justify-content:space-between;align-items:center;max-width:1180px;margin:0 auto;padding-inline:20px}
+.stage-ui .label{display:flex;align-items:center;gap:10px}
+.stage-ui .label::after{content:"";width:1px;height:28px;background:var(--fg);animation:drip 1.6s ease-in-out infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.stage-count{font-family:var(--mono);font-size:12px;letter-spacing:.1em}
+.stage-fade{position:absolute;inset:0;background:var(--bg);opacity:0;pointer-events:none}
+
+/* бегущая строка с адресами */
+.ticker{overflow:hidden;background:var(--fg);color:var(--bg);border-block:1px solid var(--fg)}
+.ticker-track{display:flex;width:max-content;white-space:nowrap;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding-block:13px;will-change:transform}
+.ticker-track span{padding-inline:24px;position:relative}
+.ticker-track span::after{content:"";position:absolute;right:0;top:50%;width:6px;height:6px;translate:50% -50%;background:var(--bg)}
+
+/* hero */
+.hero{padding-block:72px 56px;display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:end}
+.hero h1{font-size:clamp(34px,5.4vw,64px);font-weight:900;line-height:1.02}
+.hero p{max-width:52ch;color:var(--muted);margin:20px 0 28px}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--fg);color:var(--bg);border:0;padding:14px 22px;font-weight:600;cursor:pointer;text-decoration:none}
+.cta:hover{opacity:.85}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;border-top:2px solid var(--fg)}
+.facts div{padding-block:18px;border-bottom:1px solid var(--line)}
+.facts b{display:block;font-family:var(--display);font-size:clamp(30px,4vw,48px);font-weight:700;line-height:1.05}
+.facts span{font-size:13px;color:var(--muted)}
+
+/* «поклейка»: блоки появляются слева направо, как постер, который раскатывают по щиту */
+.js .reveal{position:relative;clip-path:inset(0 100% 0 0);transition:clip-path 1.1s cubic-bezier(.77,0,.18,1)}
+.js .reveal.in{clip-path:inset(0 -2% 0 0)}
+.js .reveal::before{content:"";position:absolute;top:0;bottom:0;left:0;width:4px;background:var(--fg);opacity:0;pointer-events:none;z-index:2}
+.js .reveal.in::before{animation:squeegee 1.1s cubic-bezier(.77,0,.18,1) forwards}
+@keyframes squeegee{0%{left:0;opacity:1}88%{left:calc(100% - 4px);opacity:1}100%{left:calc(100% - 4px);opacity:0}}
+
+section{padding-block:56px;border-top:1px solid var(--line)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.sec-head h2{font-size:clamp(24px,3vw,36px);font-weight:700}
+.sec-head p{max-width:56ch;color:var(--muted);margin:8px 0 0}
+
+/* map */
+.map-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;border:1px solid var(--fg)}
+#map{height:580px;min-width:0;background:var(--soft);z-index:0}
+#map [class$="-ground-pane"]{filter:var(--tiles)}
+#map [class*="-copyrights-pane"]{font-family:var(--body)}
+.ymap-pop{color:#0a0a0a;font-family:var(--body);font-size:14px;line-height:1.45;min-width:220px;padding:4px 2px}
+.ymap-pop b{display:block;font-size:15px;margin-bottom:6px}
+.ymap-pop .row{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:3px 0;border-bottom:1px dashed #d9d9d9}
+.ymap-pop .free{font-family:var(--mono);font-size:11px;color:#6b6b6b;margin:8px 0 10px}
+.ymap-pop .pick-btn{width:100%;border:1px solid #0a0a0a;background:#0a0a0a;color:#fff;padding:9px;cursor:pointer;font-weight:600;font-family:var(--body)}
+.ymap-pop .pick-btn.on{background:#fff;color:#0a0a0a}
+.ymp{position:relative;width:0;height:0;cursor:pointer}
+.ymp span{position:absolute;left:0;top:0;translate:-50% -50%}
+.pin{background:none;border:0}
+.pin span{display:grid;place-items:center;width:30px;height:30px;background:var(--fg);color:var(--bg);font:600 12px/1 var(--mono);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--fg);transition:transform .15s}
+.pin span.round{border-radius:50%}
+.pin.on span{background:var(--bg);color:var(--fg);box-shadow:0 0 0 3px var(--fg);transform:scale(1.18)}
+.picked{border-left:1px solid var(--fg);display:flex;flex-direction:column;max-height:580px;min-width:0}
+.picked-head{padding:16px 18px;border-bottom:1px solid var(--line)}
+.picked-head h3{font-size:16px}
+.picked-head p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.picked ol{list-style:none;margin:0;padding:0;overflow:auto;flex:1;counter-reset:p}
+.picked li{padding:14px 18px;border-bottom:1px solid var(--line);counter-increment:p;position:relative}
+.picked li::before{content:counter(p);position:absolute;left:18px;top:14px;font-family:var(--mono);font-size:12px;width:20px;height:20px;display:grid;place-items:center;background:var(--fg);color:var(--bg)}
+.picked li .in{padding-left:30px}
+.picked li b{display:block;font-size:14px;line-height:1.35}
+.picked li .sides{font-size:13px;color:var(--muted);margin:4px 0 6px}
+.picked .links{display:flex;flex-wrap:wrap;gap:4px 14px}
+.picked .links a,.picked .links button{font-family:var(--mono);font-size:12px;background:none;border:0;padding:0;cursor:pointer;color:var(--fg);text-decoration:underline;text-underline-offset:3px}
+.picked .rm{position:absolute;right:14px;top:12px;background:none;border:0;cursor:pointer;color:var(--muted);font-size:14px}
+.picked .none{padding:24px 18px;color:var(--muted);font-size:14px}
+.picked-actions{padding:14px 18px;border-top:1px solid var(--fg);display:grid;gap:8px}
+.btn-line{border:1px solid var(--fg);background:var(--bg);padding:10px 12px;cursor:pointer;font-weight:600;font-size:14px}
+.btn-line:hover{background:var(--soft)}
+.picked-actions .cta{justify-content:center}
+tr.flash th.place{background:var(--soft)}
+.pin span.cluster{width:38px;height:38px;font-size:13px;background:var(--bg);color:var(--fg);box-shadow:0 0 0 2px var(--fg)}
+.search-row{display:flex;gap:16px;align-items:end;flex-wrap:wrap;margin-bottom:12px}
+.search{display:grid;gap:6px;flex:1 1 320px;min-width:0}
+.search input{border:1px solid var(--fg);background:var(--bg);padding:12px 14px;font-size:15px;width:100%}
+.grid-scroll .none{padding:24px 14px;color:var(--muted);margin:0}
+.more{display:block;width:100%;margin-top:-1px}
+.picked li .label{display:block;margin-bottom:2px}
+
+/* booking */
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{border:1px solid var(--line);background:var(--bg);padding:8px 14px;cursor:pointer;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:12px;align-items:center}
+.legend i{display:inline-block;width:16px;height:16px;vertical-align:-3px;margin-right:6px;border:1px solid var(--fg)}
+.legend .l-free{background:var(--bg);border-color:var(--line)}
+.legend .l-sel{background:var(--fg)}
+.legend .l-busy{background:repeating-linear-gradient(45deg,var(--fg) 0 2px,var(--bg) 2px 6px)}
+.status{font-family:var(--mono);font-size:12px;margin-left:auto}
+.grid-scroll{overflow-x:auto;border:1px solid var(--line)}
+table.grid{border-collapse:collapse;width:100%;min-width:980px}
+.grid th,.grid td{border-bottom:1px solid var(--line);padding:0}
+.grid thead th{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:10px 4px;text-align:center;background:var(--soft)}
+.grid thead th:first-child{text-align:left;padding-left:14px}
+.grid th.place{text-align:left;padding:10px 14px;font-weight:400;min-width:280px;background:var(--bg);position:sticky;left:0;z-index:1;border-right:1px solid var(--line)}
+.place b{display:block;font-weight:600;font-size:14px}
+.place span{font-size:12px;color:var(--muted)}
+.place .tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;border:1px solid var(--fg);padding:1px 5px;margin-right:6px;color:var(--fg)}
+.grid td{border-left:1px solid var(--line);text-align:center}
+.cell{width:100%;height:52px;border:0;background:var(--bg);cursor:pointer;font-family:var(--mono);font-size:11px;color:var(--muted);display:block}
+.cell:hover{background:var(--soft);color:var(--fg)}
+.cell[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.cell.busy{background:repeating-linear-gradient(45deg,var(--fg) 0 2px,var(--bg) 2px 7px);cursor:not-allowed;color:transparent}
+.cell.past{cursor:not-allowed;opacity:.35}
+.cell.past:hover{background:var(--bg);color:var(--muted)}
+
+.book-panel{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;margin-top:32px;align-items:start}
+.cart{border:1px solid var(--fg);padding:22px}
+.cart h3{font-size:18px;margin-bottom:14px}
+.cart ul{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.cart li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.cart li button{background:none;border:0;cursor:pointer;color:var(--muted);padding:0 4px}
+.cart .empty{color:var(--muted);font-size:14px}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px}
+.total b{font-family:var(--display);font-size:28px}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+.total.sub{margin-top:6px}
+.total.sub b{font-size:18px}
+.pin span.wide{width:36px;font-size:11px}
+form.order{display:grid;gap:12px}
+form.order label{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+form.order input{border:1px solid var(--line);background:var(--bg);padding:12px;font-size:15px;color:var(--fg)}
+form.order input:focus{border-color:var(--fg);outline:none}
+.msg{font-size:14px;padding:12px;border:1px solid var(--fg);display:none}
+.msg.show{display:block}
+.cta[disabled]{opacity:.35;cursor:not-allowed}
+
+/* hanging rules */
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--line)}
+.rules div{padding:22px;border-right:1px solid var(--line)}
+.rules div:last-child{border-right:0}
+.rules h3{font-size:15px;font-weight:700;margin:6px 0 10px}
+.rules p{margin:0;font-size:14px;color:var(--muted)}
+.rules .mono{font-family:var(--mono);font-size:13px;color:var(--fg)}
+
+/* history */
+.timeline{display:grid;grid-template-columns:180px 1fr;gap:0;border-top:1px solid var(--fg)}
+.timeline dt,.timeline dd{margin:0;padding:20px 0;border-bottom:1px solid var(--line)}
+.timeline dt{font-family:var(--display);font-weight:700;font-size:20px}
+.timeline dd{max-width:68ch}
+.timeline dd b{display:block;margin-bottom:4px}
+.timeline dd span{color:var(--muted);font-size:15px}
+.big-year{font-family:var(--display);font-weight:900;font-size:clamp(80px,16vw,200px);line-height:.85;letter-spacing:-.04em;margin-bottom:24px}
+.formats{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.formats span{border:1px solid var(--line);padding:6px 12px;font-size:13px}
+.cities{columns:3;column-gap:24px;font-size:14px;margin-top:8px}
+
+footer{border-top:1px solid var(--fg);padding-block:40px}
+.contacts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.contacts p{margin:6px 0 0;font-size:15px}
+.contacts .copy{background:none;border:1px solid var(--line);padding:2px 8px;font-size:12px;cursor:pointer;margin-left:8px}
+.fine{font-size:12px;color:var(--muted);margin-top:32px;max-width:80ch}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;gap:32px;padding-block:40px}
+  .scene{width:88vw;top:40%}
+  .stage{height:300vh}
+  .book-panel{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+  .rules div{border-right:0;border-bottom:1px solid var(--line)}
+  .timeline{grid-template-columns:1fr}
+  .timeline dt{padding-bottom:0;border-bottom:0}
+  .contacts{grid-template-columns:1fr}
+  .cities{columns:2}
+  nav{display:none}
+  .theme-btn #themeLabel{display:none}
+  .grid th.place{min-width:200px}
+  .map-layout{grid-template-columns:1fr}
+  #map{height:420px}
+  .picked{border-left:0;border-top:1px solid var(--fg);max-height:none}
+}
+@media (max-width:520px){.logo small{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.stage{height:auto}.stage-sticky{position:relative;height:78vh}.stage-ui .label::after{animation:none}.js .reveal{clip-path:none}.js .reveal::before{display:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top">ГРЕЙХАУНД<small>КИРОВ · С 2000</small></a>
+    <nav>
+      <a href="#map-sec">Карта</a>
+      <a href="#book">Бронирование</a>
+      <a href="#rules">Монтаж</a>
+      <a href="#history">История</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <button class="theme-btn" type="button" id="themeBtn" aria-label="Переключить тему"><span class="theme-dot"></span><span id="themeLabel">Тёмная</span></button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="stage" id="stage" aria-label="Рекламный щит Грейхаунд">
+    <div class="stage-sticky">
+      <div class="sky" aria-hidden="true"><canvas id="skyline"></canvas></div>
+      <div class="scene" id="scene" aria-hidden="true">
+        <div class="lamps"><i></i><i></i><i></i></div>
+        <div class="bb-frame"><div class="bb-face" id="bbFace"></div></div>
+        <div class="bb-deck"></div>
+        <div class="bb-pole"></div>
+      </div>
+      <div class="stage-ui">
+        <span class="label">Листайте вниз</span>
+        <span class="stage-count num" id="stageCount">01 / 03</span>
+      </div>
+      <div class="stage-fade" id="stageFade"></div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+  <div class="wrap hero">
+    <div>
+      <div class="label">Оператор наружной рекламы · Киров и область</div>
+      <h1>Ваша реклама на щите 6×3 в Кирове</h1>
+      <p>Выберите место на карте и месяцы размещения, и вы сразу увидите стоимость по прайсу. Занятые месяцы отмечены штриховкой. После брони менеджер свяжется с вами и согласует макет.</p>
+      <a class="cta" href="#map-sec">Открыть карту щитов →</a>
+    </div>
+    <div class="facts">
+      <div><b class="num" id="years">26</b><span>лет на рынке</span></div>
+      <div><b class="num" id="factLocs">290</b><span>рекламных конструкций</span></div>
+      <div><b class="num" id="factSides">782</b><span>рекламных поверхности</span></div>
+      <div><b class="num">6×3</b><span>метров, основной формат</span></div>
+    </div>
+  </div>
+
+  <section id="map-sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="label">Карта конструкций</div>
+          <h2>Все щиты на карте</h2>
+          <p>Нажмите на точку, чтобы увидеть стороны и цены, и добавьте её в подборку. Можно выбрать несколько мест: справа появится список со ссылками на карты.</p>
+        </div>
+      </div>
+      <div class="controls" role="group" aria-label="Область карты">
+        <button class="chip" type="button" data-zoom="kirov" aria-pressed="true">Весь Киров</button>
+        <button class="chip" type="button" data-zoom="center" aria-pressed="false">Центр</button>
+        <button class="chip" type="button" data-zoom="region" aria-pressed="false">Область</button>
+        <button class="chip" type="button" data-zoom="picked" aria-pressed="false">Моя подборка</button>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--fg)"></i>Щит 6×3 (Щ)</span>
+        <span><i style="background:var(--fg);border-radius:50%"></i>Призматрон 6×3 (П)</span>
+        <span>СБ — сити-борд, СФ — сити-формат, ПЛ — пилларс, К — крышная</span>
+        <span><i style="background:var(--bg);box-shadow:0 0 0 2px var(--fg)"></i>В подборке</span>
+        <span>Число в круге — несколько щитов рядом, приблизьте карту</span>
+      </div>
+      <div class="map-layout">
+        <div id="map" role="region" aria-label="Карта рекламных щитов"></div>
+        <aside class="picked" aria-label="Выбранные места">
+          <div class="picked-head"><h3>Подборка <span class="num" id="pickCount">0</span></h3><p id="pickSum">Выберите точки на карте</p></div>
+          <ol id="pickList"></ol>
+          <p class="none" id="pickNone">Пока ничего не выбрано. Нажмите на значок щита на карте и затем «Добавить в подборку».</p>
+          <div class="picked-actions" id="pickActions" hidden>
+            <button class="cta" type="button" id="pickBook">Забронировать выбранные →</button>
+            <button class="btn-line" type="button" id="pickCopy">Скопировать список со ссылками</button>
+            <button class="btn-line" type="button" id="pickShare">Скопировать ссылку на подборку</button>
+            <button class="btn-line" type="button" id="pickClear">Очистить</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="label">Адресная программа</div>
+          <h2>Свободные поверхности по месяцам</h2>
+          <p>Нажмите на свободную клетку, чтобы добавить месяц в заявку. Срок аренды считается календарными месяцами. У призматрона каждая грань (A1, A2, A3) бронируется отдельно.</p>
+        </div>
+      </div>
+
+      <div class="controls" role="group" aria-label="Тип конструкции">
+        <button class="chip" type="button" data-f="all" aria-pressed="true">Все</button>
+        <button class="chip" type="button" data-f="Щ">Щит 6×3</button>
+        <button class="chip" type="button" data-f="П">Призматрон 6×3</button>
+        <button class="chip" type="button" data-f="СБ">Сити-борд</button>
+        <button class="chip" type="button" data-f="СФ">Сити-формат</button>
+        <button class="chip" type="button" data-f="ПЛ">Пилларс</button>
+        <button class="chip" type="button" data-f="К">Крышные</button>
+        <button class="chip" type="button" data-f="light">С подсветкой</button>
+        <button class="chip" type="button" data-f="picked" id="chipPicked" hidden>Из подборки на карте</button>
+      </div>
+      <div class="legend">
+        <span><i class="l-free"></i>Свободно</span>
+        <span><i class="l-sel"></i>В заявке</span>
+        <span><i class="l-busy"></i>Занято</span>
+        <span class="status" id="status">Подключение…</span>
+      </div>
+
+      <div class="search-row">
+        <label class="search" for="gridSearch"><span class="label">Поиск</span><input id="gridSearch" type="search" placeholder="Улица или код щита, например «Воровского» или «KVBB 001»" autocomplete="off"></label>
+        <span class="label" id="gridCount"></span>
+      </div>
+      <div class="grid-scroll">
+        <table class="grid" id="grid"><thead></thead><tbody></tbody></table>
+        <p class="none" id="gridNone" hidden>Ничего не найдено. Проверьте написание улицы или сбросьте фильтр.</p>
+      </div>
+      <button class="btn-line more" type="button" id="gridMore" hidden>Показать ещё</button>
+
+      <div class="book-panel">
+        <div class="cart">
+          <h3>Ваша заявка</h3>
+          <ul id="cart"></ul>
+          <p class="empty" id="cartEmpty">Пока пусто. Выберите месяцы в таблице выше.</p>
+          <div class="total"><span>Аренда по прайсу</span><b class="num" id="total">0 ₽</b></div>
+          <div class="total sub" id="prodRow" hidden><span>Печать и монтаж, разово</span><b class="num" id="prod">0 ₽</b></div>
+          <p class="note" id="onRequest" hidden></p>
+          <p class="note">Цены по прайсу компании за месяц. Печать и монтаж считаются один раз на каждую поверхность, если печатаете у нас. Скидки на длинный срок подтвердит менеджер.</p>
+        </div>
+        <form class="order" id="order" novalidate>
+          <label for="f-name">Контактное лицо<input id="f-name" name="name" autocomplete="name" required placeholder="Иван Петров"></label>
+          <label for="f-company">Компания<input id="f-company" name="company" autocomplete="organization" placeholder="ООО «Вятка»"></label>
+          <label for="f-phone">Телефон<input id="f-phone" name="phone" type="tel" autocomplete="tel" required placeholder="+7 912 000-00-00"></label>
+          <div class="hp" aria-hidden="true"><label for="f-website">Сайт<input id="f-website" name="website" tabindex="-1" autocomplete="off"></label></div>
+          <button class="cta" type="submit" id="submit" disabled>Забронировать</button>
+          <div class="msg" id="msg" role="status"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="label">Когда и как вешается реклама</div>
+          <h2>Монтаж и требования к макету</h2>
+        </div>
+      </div>
+      <div class="rules">
+        <div>
+          <div class="label">Сроки</div>
+          <h3>Поклейка в начале периода</h3>
+          <p>Размещение идёт с первого числа выбранного месяца. Готовое полотно или плёнку нужно передать заранее, точный срок сдачи согласует менеджер. Аренду меньше месяца брать не советуем: за такой срок щит почти не успевает дать отдачу.</p>
+        </div>
+        <div>
+          <div class="label">Щит · баннер</div>
+          <h3>Виниловое полотно 4+0</h3>
+          <p class="mono">Полотно 6200×3000 мм<br>Печать 6100×3000 мм<br>Инфо-поле 5800×2800 мм</p>
+          <p>Нужен непрозрачный винил без карманов, плотностью около 440 г/м². Проклеивать края не обязательно.</p>
+        </div>
+        <div>
+          <div class="label">Призматрон</div>
+          <h3>Самоклеящаяся плёнка</h3>
+          <p class="mono">Изображение 6050×3000 мм<br>Отступ 10 см по периметру<br>Плёнка от 100 мкм</p>
+          <p>Нарезка по линиям, нахлёст 20 мм. Для светлого фона нужна плёнка с подложкой blackout. При заказе от 10 плакатов на срок больше месяца плёнки нужно на 10% больше.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="history">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="label">О компании</div>
+          <h2>История «Грейхаунда»</h2>
+        </div>
+      </div>
+      <div class="big-year num">2000</div>
+      <dl class="timeline">
+        <dt>20.04.2000</dt>
+        <dd><b>Регистрация компании</b><span>«Рекламная компания Грейхаунд» начинала с нуля, когда рынок наружной рекламы в Кирове уже сложился. Первым делом компания занялась производством рекламы и установкой собственных конструкций разных форматов.</span></dd>
+        <dt>Цель</dt>
+        <dd><b>Первое место по числу рекламных мест</b><span>Компания поставила задачу стать лидером рынка Кирова и области по количеству рекламоносителей. Затем к ней добавились качество конструкций, рост квалификации сотрудников и расширение круга заказчиков.</span></dd>
+        <dt>Область</dt>
+        <dd><b>13 городов Кировской области</b><span>Щиты 6×3 стоят не только в Кирове, но и в районных центрах:</span>
+          <div class="cities"><div>Киров</div><div>Кирово-Чепецк</div><div>Слободской</div><div>Котельнич</div><div>Советск</div><div>Орлов</div><div>Омутнинск</div><div>Пижанка</div><div>Белая Холуница</div><div>Яранск</div><div>Кикнур</div><div>Юрья</div><div>Мураши</div></div>
+        </dd>
+        <dt>Форматы</dt>
+        <dd><b>От щитов до брандмауэров</b><span>Компания работает с основными форматами наружной рекламы:</span>
+          <div class="formats"><span>Щиты 6×3</span><span>Призматроны</span><span>Ситиборды</span><span>Сити-форматы</span><span>Пилларсы</span><span>Крышные панели</span><span>Брандмауэры</span></div>
+        </dd>
+        <dt>Сегодня</dt>
+        <dd><b>Ведущий оператор Кирова</b><span>Компания называет себя ведущим оператором наружной рекламы в Кирове. Принцип работы прежний: сотрудничать со всеми, кто ведёт законный бизнес и отвечает за свои обязательства.</span></dd>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer id="contacts">
+  <div class="wrap">
+    <div class="contacts">
+      <div><div class="label">Офис</div><p>610000, г. Киров,<br>ул. Ленина, 92в</p></div>
+      <div><div class="label">Телефон</div><p><span id="ph">8 (8332) 651-310</span><button class="copy" type="button" data-copy="ph">копировать</button></p><p style="color:var(--muted);font-size:14px">также 475-000, 476-000, 462-000</p></div>
+      <div><div class="label">Почта</div><p><span id="em">greyhound2000@mail.ru</span><button class="copy" type="button" data-copy="em">копировать</button></p><p style="font-size:14px"><a href="http://greyhound-reklama.ru" target="_blank" rel="noopener">greyhound-reklama.ru</a></p></div>
+    </div>
+    <p class="fine">Год основания, контакты, города, форматы и технические требования взяты с сайта компании. Цены по прайсу компании; печать и монтаж оплачиваются отдельно. Окончательную стоимость подтверждает менеджер после заявки.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Тема: светлая / тёмная. Выбор запоминается в браузере; по умолчанию — как в системе.
+  const root=document.documentElement, btn=document.getElementById("themeBtn"), label=document.getElementById("themeLabel");
+  const sys=()=>window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+  const current=()=>root.dataset.theme||sys();
+  function paint(){const dark=current()==="dark";label.textContent=dark?"Светлая":"Тёмная";btn.setAttribute("aria-label",dark?"Включить светлую тему":"Включить тёмную тему")}
+  try{const saved=localStorage.getItem("greyhound-theme");if(saved==="dark"||saved==="light")root.dataset.theme=saved}catch(_){}
+  btn.addEventListener("click",()=>{
+    const next=current()==="dark"?"light":"dark";
+    root.dataset.theme=next;
+    try{localStorage.setItem("greyhound-theme",next)}catch(_){}
+    paint();
+    document.dispatchEvent(new Event("themechange"));
+  });
+  if(window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",paint);
+  paint();
+})();
+</script>
+<script>
+(function(){
+  // ===== НАСТРОЙКА =====
+  // Вставьте сюда адрес веб-приложения Google Apps Script (см. ИНСТРУКЦИЯ.md).
+  // Пока адрес пустой, сайт работает в демо-режиме: заявки сохраняются только в этом браузере.
+  const API_URL = "";
+  // Ключ Яндекс.Карт (JavaScript API). Можно оставить пустым; ключ бесплатно выдаётся на developer.tech.yandex.ru.
+  const YANDEX_API_KEY = "";
+  // =====================
+
+  // ===== АДРЕСНАЯ ПРОГРАММА И ПРАЙС =====
+  // Источник: «ТАБЛИЦА РЕЗЕРВОВ.xls» (столбец «Прайс», печать, монтаж, координаты, занятость)
+  // + стороны с greyhound-reklama.ru, которых нет в таблице (у них цена по запросу).
+  // Формат: [id, точка, код, адрес, тип, подсветка, широта, долгота, прайс/мес, печать, монтаж, размер]
+  // Тип: Щ — щит, П — призматрон, СБ — сити-борд, СФ — сити-формат, ПЛ — пилларс, К — крышная конструкция.
+  // Прайс 0 = цена по запросу.
+  const RAW=[
+["kvbb001a3","kvbb001","KVBB 001 A3","Воровского, 94 - Производственная","П",1,58.596867,49.611864,32000,10000,5000,"6×3"],
+["kvbb001b3","kvbb001","KVBB 001 B3","Воровского, 94 - Производственная","П",1,58.596867,49.611864,32000,10000,5000,"6×3"],
+["kvbb002a","kvbb002","KVBB 002 A","Владимирская (К. Маркса), 41","П",1,58.610022,49.667275,0,0,0,"6×3"],
+["kvbb002b3","kvbb002","KVBB 002 B3","Владимирская (К. Маркса), 41","П",1,58.610022,49.667275,50000,10000,5000,"6×3"],
+["kvbb003a1","kvbb003","KVBB 003 A1","Воровского, 78","П",1,58.59321,49.632798,50000,10000,7000,"6×3"],
+["kvbb003b1","kvbb003","KVBB 003 B1","Воровского, 78","П",1,58.59321,49.632798,50000,10000,7000,"6×3"],
+["kvbb004a2","kvbb004","KVBB 004 A2","Воровского, 54 ЦУМ","П",1,58.593475,49.649917,50000,10000,7000,"6×3"],
+["kvbb004b3","kvbb004","KVBB 004 B3","Воровского, 54 ЦУМ","П",1,58.593475,49.649917,50000,10000,7000,"6×3"],
+["kvbb005a1","kvbb005","KVBB 005 A1","Воровского, 42 к6 - Владимирская (К. Маркса), 113 ЕВРОПЕЙСКИЙ","П",1,58.593744,49.66597,58000,10000,7000,"6×3"],
+["kvbb005a2","kvbb005","KVBB 005 A2","Воровского, 42 к6 - Владимирская (К. Маркса), 113 ЕВРОПЕЙСКИЙ","П",1,58.593744,49.66597,58000,10000,7000,"6×3"],
+["kvbb005a3","kvbb005","KVBB 005 A3","Воровского, 42 к6 - Владимирская (К. Маркса), 113 ЕВРОПЕЙСКИЙ","П",1,58.593744,49.66597,58000,10000,7000,"6×3"],
+["kvbb005b3","kvbb005","KVBB 005 B3","Воровского, 42 к6 - Владимирская (К. Маркса), 113 ЕВРОПЕЙСКИЙ","П",1,58.593744,49.66597,72000,10000,7000,"6×3"],
+["kvbb006a","kvbb006","KVBB 006 A","Луганская, 53/1 ЛЕМАНО ПРО, ТРЦ МАКСИ","П",1,58.613452,49.596934,0,0,0,"6×3"],
+["kvbb006b2","kvbb006","KVBB 006 B2","Луганская, 53/1 ЛЕМАНО ПРО, ТРЦ МАКСИ","П",1,58.613452,49.596934,43000,10000,5000,"6×3"],
+["kvbb007a2","kvbb007","KVBB 007 A2","Ломоносова, 5 АВТОРЫНОК","П",1,58.61261,49.602771,37000,10000,5000,"6×3"],
+["kvbb007b","kvbb007","KVBB 007 B","Ломоносова, 5 АВТОРЫНОК","Щ",1,58.61261,49.602771,0,0,0,"6×3"],
+["kvbb008a1","kvbb008","KVBB 008 A1","Ломоносова, 5 ГИПЕР МАКСИ","П",1,58.611936,49.60386,32000,10000,5000,"6×3"],
+["kvbb008b3","kvbb008","KVBB 008 B3","Ломоносова, 5 ГИПЕР МАКСИ","П",1,58.611936,49.60386,35000,10000,5000,"6×3"],
+["kvbb009a3","kvbb009","KVBB 009 A3","Ломоносова, 25","П",1,58.608291,49.609755,32000,10000,5000,"6×3"],
+["kvbb009b1","kvbb009","KVBB 009 B1","Ломоносова, 25","П",1,58.608291,49.609755,32000,10000,5000,"6×3"],
+["kvbb010a3","kvbb010","KVBB 010 A3","Производственная, 20","П",1,58.593798,49.613794,37000,10000,5000,"6×3"],
+["kvbb010b1","kvbb010","KVBB 010 B1","Производственная, 20","П",1,58.593798,49.613794,32000,10000,5000,"6×3"],
+["kvbb011a1","kvbb011","KVBB 011 A1","Октябрьский пр-т, 57","П",1,58.626559,49.644623,35000,10000,5000,"6×3"],
+["kvbb011b2","kvbb011","KVBB 011 B2","Октябрьский пр-т, 57","П",1,58.626559,49.644623,34000,10000,5000,"6×3"],
+["kvbb012a3","kvbb012","KVBB 012 A3","Октябрьский пр-т, 26","П",1,58.621425,49.654374,35000,10000,5000,"6×3"],
+["kvbb012b2","kvbb012","KVBB 012 B2","Октябрьский пр-т, 26","П",1,58.621425,49.654374,32000,10000,5000,"6×3"],
+["kvbb013a2","kvbb013","KVBB 013 A2","Октябрьский пр-т, 67","П",1,58.62279,49.650812,37000,10000,5000,"6×3"],
+["kvbb013a3","kvbb013","KVBB 013 A3","Октябрьский пр-т, 67","П",1,58.62279,49.650812,32000,10000,5000,"6×3"],
+["kvbb013b1","kvbb013","KVBB 013 B1","Октябрьский пр-т, 67","П",1,58.622791,49.650813,32000,10000,5000,"6×3"],
+["kvbb013b3","kvbb013","KVBB 013 B3","Октябрьский пр-т, 67","П",1,58.622793,49.650815,34000,10000,5000,"6×3"],
+["kvbb014a1","kvbb014","KVBB 014 A1","Строителей, 21","П",1,58.594213,49.590381,32000,10000,5000,"6×3"],
+["kvbb014a3","kvbb014","KVBB 014 A3","Строителей, 21","П",1,58.594213,49.590381,34000,10000,5000,"6×3"],
+["kvbb014b1","kvbb014","KVBB 014 B1","Строителей, 21","П",1,58.594213,49.590381,29000,10000,5000,"6×3"],
+["kvbb014b3","kvbb014","KVBB 014 B3","Строителей, 21","П",1,58.594213,49.590381,34000,10000,5000,"6×3"],
+["kvbb015a1","kvbb015","KVBB 015 A1","Щорса, 19","П",1,58.57801,49.636783,34000,10000,5000,"6×3"],
+["kvbb015b","kvbb015","KVBB 015 B","Щорса, 19","Щ",1,58.57801,49.636783,32000,7500,5000,"6×3"],
+["kvbb016a1","kvbb016","KVBB 016 A1","Щорса, 72 направление АЭРОПОРТ","П",1,58.574063,49.567626,29000,10000,5000,"6×3"],
+["kvbb016a2","kvbb016","KVBB 016 A2","Щорса, 72 направление АЭРОПОРТ","П",1,58.574063,49.567626,29000,10000,5000,"6×3"],
+["kvbb016a3","kvbb016","KVBB 016 A3","Щорса, 72 направление АЭРОПОРТ","П",1,58.574063,49.567626,29000,10000,5000,"6×3"],
+["kvbb016b","kvbb016","KVBB 016 B","Щорса, 72 направление АЭРОПОРТ","Щ",1,58.574063,49.567626,32000,10000,5000,"6×3"],
+["kvbb017a1","kvbb017","KVBB 017 A1","Щорса, 70 направление АЭРОПОРТ","П",1,58.574576,49.569329,32000,10000,5000,"6×3"],
+["kvbb017a2","kvbb017","KVBB 017 A2","Щорса, 70 направление АЭРОПОРТ","П",1,58.574576,49.569329,32000,10000,5000,"6×3"],
+["kvbb017a3","kvbb017","KVBB 017 A3","Щорса, 70 направление АЭРОПОРТ","П",1,58.574576,49.569329,32000,10000,5000,"6×3"],
+["kvbb017b","kvbb017","KVBB 017 B","Щорса, 70 направление АЭРОПОРТ","Щ",1,58.574576,49.569329,0,0,0,"6×3"],
+["kvbb018a3","kvbb018","KVBB 018 A3","Владимирская (К. Маркса), 47 Драм театр","П",1,58.60642,49.66756,50000,10000,5000,"6×3"],
+["kvbb018b","kvbb018","KVBB 018 B","Владимирская (К. Маркса), 47 Драм театр","П",1,58.60642,49.66756,0,0,0,"6×3"],
+["kvbb019a3","kvbb019","KVBB 019 A3","Щорса, 23","П",1,58.5779,49.634407,37000,10000,5000,"6×3"],
+["kvbb019b1","kvbb019","KVBB 019 B1","Щорса, 23","П",1,58.5779,49.634407,34000,10000,5000,"6×3"],
+["kvbb019b3","kvbb019","KVBB 019 B3","Щорса, 23","П",1,58.5779,49.634407,34000,10000,5000,"6×3"],
+["kvbb020a1","kvbb020","KVBB 020 A1","Воровского, 161, ЗАПРЕТ Строительства","П",1,58.59702,49.589196,32000,10000,5000,"6×3"],
+["kvbb020a3","kvbb020","KVBB 020 A3","Воровского, 161, ЗАПРЕТ Строительства","П",1,58.59702,49.589196,32000,10000,5000,"6×3"],
+["kvbb020b","kvbb020","KVBB 020 B","Воровского, 161, ЗАПРЕТ Строительства","Щ",1,58.59702,49.589196,29000,7500,5000,"6×3"],
+["kvbb023a2","kvbb023","KVBB 023 A2","Воровского, 115","П",1,58.596896,49.616911,34000,10000,5000,"6×3"],
+["kvbb023a3","kvbb023","KVBB 023 A3","Воровского, 115","П",1,58.596896,49.616911,34000,10000,5000,"6×3"],
+["kvbb023b1","kvbb023","KVBB 023 B1","Воровского, 115","П",1,58.596896,49.616911,34000,10000,5000,"6×3"],
+["kvbb023b2","kvbb023","KVBB 023 B2","Воровского, 115","П",1,58.582561,49.649339,34000,10000,5000,"6×3"],
+["kvbb023b3","kvbb023","KVBB 023 B3","Воровского, 115","П",1,58.596896,49.616911,34000,10000,5000,"6×3"],
+["kvbb024a2","kvbb024","KVBB 024 A2","Владимирская (К. Маркса), 4 MAZDA, LADA","П",1,58.619833,49.658539,37000,10000,5000,"6×3"],
+["kvbb024a3","kvbb024","KVBB 024 A3","Владимирская (К. Маркса), 4 MAZDA, LADA","П",1,58.619833,49.658539,37000,10000,5000,"6×3"],
+["kvbb024b1","kvbb024","KVBB 024 B1","Владимирская (К. Маркса), 4 MAZDA, LADA","П",1,58.619833,49.658539,37000,10000,5000,"6×3"],
+["kvbb024b2","kvbb024","KVBB 024 B2","Владимирская (К. Маркса), 4 MAZDA, LADA","П",1,58.619833,49.658539,37000,10000,5000,"6×3"],
+["kvbb025a2","kvbb025","KVBB 025 A2","Владимирская (К. Маркса), 169","П",1,58.585951,49.669727,37000,10000,5000,"6×3"],
+["kvbb025b1","kvbb025","KVBB 025 B1","Владимирская (К. Маркса), 169","П",1,58.585951,49.669727,34000,10000,5000,"6×3"],
+["kvbb025b2","kvbb025","KVBB 025 B2","Владимирская (К. Маркса), 169","П",1,58.585951,49.669727,34000,10000,5000,"6×3"],
+["kvbb025b3","kvbb025","KVBB 025 B3","Владимирская (К. Маркса), 169","П",1,58.585951,49.669727,34000,10000,5000,"6×3"],
+["kvbb026a","kvbb026","KVBB 026 A","Ленина, 134/1","П",1,58.582873,49.684361,0,0,0,"6×3"],
+["kvbb026b1","kvbb026","KVBB 026 B1","Ленина, 134/1","П",1,58.582873,49.684361,44000,10000,5000,"6×3"],
+["kvbb026b3","kvbb026","KVBB 026 B3","Ленина, 134/1","П",1,58.582873,49.684361,44000,10000,5000,"6×3"],
+["kvbb027a","kvbb027","KVBB 027 A","Некрасова, 14","Щ",1,58.582545,49.649322,0,0,0,"6×3"],
+["kvbb027b","kvbb027","KVBB 027 B","Некрасова, 14","Щ",1,58.582545,49.649322,0,0,0,"6×3"],
+["kvbb028a1","kvbb028","KVBB 028 A1","Некрасова, 10 - Горького, 52 Автовокзал, район ЖД Вокзал","П",1,58.582568,49.651603,40000,10000,5000,"6×3"],
+["kvbb028a2","kvbb028","KVBB 028 A2","Некрасова, 10 - Горького, 52 Автовокзал, район ЖД Вокзал","П",1,58.582568,49.651603,40000,10000,5000,"6×3"],
+["kvbb028b3","kvbb028","KVBB 028 B3","Некрасова, 10 - Горького, 52 Автовокзал, район ЖД Вокзал","П",1,58.582561,49.649339,34000,10000,5000,"6×3"],
+["kvbb029a2","kvbb029","KVBB 029 A2","Горького, 54 Автовокзал, район ЖД Вокзал","П",1,58.581329,49.65131,29000,10000,5000,"6×3"],
+["kvbb029a3","kvbb029","KVBB 029 A3","Горького, 54 Автовокзал, район ЖД Вокзал","П",1,58.581329,49.65131,32000,10000,5000,"6×3"],
+["kvbb029b1","kvbb029","KVBB 029 B1","Горького, 54 Автовокзал, район ЖД Вокзал","П",1,58.582561,49.649339,29000,10000,5000,"6×3"],
+["kvbb030a1","kvbb030","KVBB 030 A1","Ленина, 122 - Милицейская","П",1,58.586404,49.682535,44000,10000,5000,"6×3"],
+["kvbb030a3","kvbb030","KVBB 030 A3","Ленина, 122 - Милицейская","П",1,58.586404,49.682535,44000,10000,5000,"6×3"],
+["kvbb030b1","kvbb030","KVBB 030 B1","Ленина, 122 - Милицейская","П",1,58.586404,49.682535,37000,10000,5000,"6×3"],
+["kvbb030b2","kvbb030","KVBB 030 B2","Ленина, 122 - Милицейская","П",1,58.586404,49.682535,37000,10000,5000,"6×3"],
+["kvbb031a1","kvbb031","KVBB 031 A1","Ленина, 179","П",1,58.577031,49.684479,39000,10000,5000,"6×3"],
+["kvbb031a2","kvbb031","KVBB 031 A2","Ленина, 179","П",1,58.577031,49.684479,37000,10000,5000,"6×3"],
+["kvbb031b1","kvbb031","KVBB 031 B1","Ленина, 179","П",1,58.577031,49.684479,39000,10000,5000,"6×3"],
+["kvbb034a1","kvbb034","KVBB 034 A1","Ленина, 198","П",1,58.566458,49.685338,39000,10000,5000,"6×3"],
+["kvbb034a3","kvbb034","KVBB 034 A3","Ленина, 198","П",1,58.566458,49.685338,39000,10000,5000,"6×3"],
+["kvbb034b1","kvbb034","KVBB 034 B1","Ленина, 198","П",1,58.566458,49.685338,39000,10000,5000,"6×3"],
+["kvbb034b2","kvbb034","KVBB 034 B2","Ленина, 198","П",1,58.566458,49.685338,37000,10000,5000,"6×3"],
+["kvbb034b3","kvbb034","KVBB 034 B3","Ленина, 198","П",1,58.566458,49.685338,37000,10000,5000,"6×3"],
+["kvbb035a3","kvbb035","KVBB 035 A3","Октябрьский пр-т, 87","П",1,58.58241,49.662308,40000,10000,5000,"6×3"],
+["kvbb035b1","kvbb035","KVBB 035 B1","Октябрьский пр-т, 87","П",1,58.615984,49.656287,34000,10000,5000,"6×3"],
+["kvbb035b2","kvbb035","KVBB 035 B2","Октябрьский пр-т, 87","П",1,58.615984,49.656287,34000,10000,5000,"6×3"],
+["kvbb035b3","kvbb035","KVBB 035 B3","Октябрьский пр-т, 87","П",1,58.615984,49.656287,34000,10000,5000,"6×3"],
+["kvbb036a","kvbb036","KVBB 036 A","Лепсе, 41","П",1,58.612973,49.623716,0,0,0,"6×3"],
+["kvbb036b1","kvbb036","KVBB 036 B1","Лепсе, 41","П",1,58.612973,49.623716,32000,10000,5000,"6×3"],
+["kvbb036b2","kvbb036","KVBB 036 B2","Лепсе, 41","П",1,58.612973,49.623716,32000,10000,5000,"6×3"],
+["kvbb036b3","kvbb036","KVBB 036 B3","Лепсе, 41","П",1,58.612973,49.623716,34000,10000,5000,"6×3"],
+["kvbb037a1","kvbb037","KVBB 037 A1","Комсомольская, 13","П",1,58.58241,49.662308,36000,10000,5000,"6×3"],
+["kvbb037a3","kvbb037","KVBB 037 A3","Комсомольская, 13","П",1,58.58241,49.662308,36000,10000,5000,"6×3"],
+["kvbb037b2","kvbb037","KVBB 037 B2","Комсомольская, 13","П",1,58.58241,49.662308,34000,10000,5000,"6×3"],
+["kvbb039a2","kvbb039","KVBB 039 A2","Хлебозаводской пр-д, 24 ТЦ Jam Moll, Карусель МОНТАЖ С ВЫШКИ","П",1,58.597583,49.641821,32000,10000,7000,"6×3"],
+["kvbb039a3","kvbb039","KVBB 039 A3","Хлебозаводской пр-д, 24 ТЦ Jam Moll, Карусель МОНТАЖ С ВЫШКИ","П",1,58.597583,49.641821,35000,10000,7000,"6×3"],
+["kvbb039b1","kvbb039","KVBB 039 B1","Хлебозаводской пр-д, 24 ТЦ Jam Moll, Карусель МОНТАЖ С ВЫШКИ","П",1,58.597583,49.641821,32000,10000,7000,"6×3"],
+["kvbb039b2","kvbb039","KVBB 039 B2","Хлебозаводской пр-д, 24 ТЦ Jam Moll, Карусель МОНТАЖ С ВЫШКИ","П",1,58.597583,49.641821,32000,10000,7000,"6×3"],
+["kvbb039b3","kvbb039","KVBB 039 B3","Хлебозаводской пр-д, 24 ТЦ Jam Moll, Карусель МОНТАЖ С ВЫШКИ","П",1,58.597583,49.641821,32000,10000,7000,"6×3"],
+["kvbb040a","kvbb040","KVBB 040 A","Сурикова, 19","Щ",0,58.588202,49.637607,0,0,0,"6×3"],
+["kvbb040b","kvbb040","KVBB 040 B","Сурикова, 19","Щ",0,58.588202,49.637607,29000,7500,5000,"6×3"],
+["kvbb041a3","kvbb041","KVBB 041 A3","Московская, 78","П",1,58.603171,49.647776,37000,10000,5000,"6×3"],
+["kvbb041b1","kvbb041","KVBB 041 B1","Московская, 78","П",1,58.603171,49.647776,37000,10000,5000,"6×3"],
+["kvbb041b2","kvbb041","KVBB 041 B2","Московская, 78","П",1,58.603171,49.647776,37000,10000,5000,"6×3"],
+["kvbb041b3","kvbb041","KVBB 041 B3","Московская, 78","П",1,58.603171,49.647776,37000,10000,5000,"6×3"],
+["kvbb042a1","kvbb042","KVBB 042 A1","Московская, 134","П",1,58.602299,49.605562,32000,10000,5000,"6×3"],
+["kvbb042a2","kvbb042","KVBB 042 A2","Московская, 134","П",1,58.602299,49.605562,32000,10000,5000,"6×3"],
+["kvbb042b","kvbb042","KVBB 042 B","Московская, 134","Щ",1,58.602299,49.605562,32000,7500,5000,"6×3"],
+["kvbb043a1","kvbb043","KVBB 043 A1","Московская, 107 МАКСИ, Haval, Changan, Exeed, JAC, Solaris","П",1,58.60308,49.630029,32000,10000,5000,"6×3"],
+["kvbb043a2","kvbb043","KVBB 043 A2","Московская, 107 МАКСИ, Haval, Changan, Exeed, JAC, Solaris","П",1,58.60308,49.630029,32000,10000,5000,"6×3"],
+["kvbb043a3","kvbb043","KVBB 043 A3","Московская, 107 МАКСИ, Haval, Changan, Exeed, JAC, Solaris","П",1,58.60308,49.630029,32000,10000,5000,"6×3"],
+["kvbb043b1","kvbb043","KVBB 043 B1","Московская, 107 МАКСИ, Haval, Changan, Exeed, JAC, Solaris","П",1,58.60308,49.630029,32000,10000,5000,"6×3"],
+["kvbb043b2","kvbb043","KVBB 043 B2","Московская, 107 МАКСИ, Haval, Changan, Exeed, JAC, Solaris","П",1,58.60308,49.630029,32000,10000,5000,"6×3"],
+["kvbb043b3","kvbb043","KVBB 043 B3","Московская, 107 МАКСИ, Haval, Changan, Exeed, JAC, Solaris","П",1,58.60308,49.630029,32000,10000,5000,"6×3"],
+["kvbb044a1","kvbb044","KVBB 044 A1","Чистопрудненская, 2а","П",1,58.565415,49.650186,29000,10000,5000,"6×3"],
+["kvbb044a2","kvbb044","KVBB 044 A2","Чистопрудненская, 2а","П",1,58.565416,49.650187,29000,10000,5000,"6×3"],
+["kvbb044a3","kvbb044","KVBB 044 A3","Чистопрудненская, 2а","П",1,58.565417,49.650188,27000,10000,5000,"6×3"],
+["kvbb044b3","kvbb044","KVBB 044 B3","Чистопрудненская, 2а","П",1,58.565415,49.650186,27000,10000,5000,"6×3"],
+["kvbb045a2","kvbb045","KVBB 045 A2","Московская, 136 - Менделеева, 21","П",1,58.602243,49.602241,35000,10000,5000,"6×3"],
+["kvbb045a3","kvbb045","KVBB 045 A3","Московская, 136 - Менделеева, 21","П",1,58.602243,49.602241,36000,10000,5000,"6×3"],
+["kvbb045b2","kvbb045","KVBB 045 B2","Московская, 136 - Менделеева, 21","П",1,58.602243,49.602241,36000,10000,5000,"6×3"],
+["kvbb045b3","kvbb045","KVBB 045 B3","Московская, 136 - Менделеева, 21","П",1,58.602243,49.602241,36000,10000,5000,"6×3"],
+["kvbb046a1","kvbb046","KVBB 046 A1","Московская, 181","П",1,58.602474,49.59451,34000,10000,5000,"6×3"],
+["kvbb046a3","kvbb046","KVBB 046 A3","Московская, 181","П",1,58.602474,49.59451,34000,10000,5000,"6×3"],
+["kvbb046b","kvbb046","KVBB 046 B","Московская, 181","Щ",1,58.602474,49.59451,29000,7500,5000,"6×3"],
+["kvbb047a1","kvbb047","KVBB 047 A1","Московская, 148","П",1,58.602226,49.595977,29000,10000,5000,"6×3"],
+["kvbb047a2","kvbb047","KVBB 047 A2","Московская, 148","П",1,58.602226,49.595977,29000,10000,5000,"6×3"],
+["kvbb047a3","kvbb047","KVBB 047 A3","Московская, 148","П",1,58.602226,49.595977,29000,10000,5000,"6×3"],
+["kvbb047b","kvbb047","KVBB 047 B","Московская, 148","Щ",1,58.602226,49.595977,29000,7500,5000,"6×3"],
+["kvbb048a","kvbb048","KVBB 048 A","Московcкая, 156 МОНТАЖ С ВЫШКИ","Щ",1,58.602176,49.593247,0,0,0,"6×3"],
+["kvbb048b","kvbb048","KVBB 048 B","Московcкая, 156 МОНТАЖ С ВЫШКИ","Щ",1,58.602176,49.593247,29000,7500,7000,"6×3"],
+["kvbb048c","kvbb048","KVBB 048 C","Московcкая, 156 МОНТАЖ С ВЫШКИ","Щ",1,58.602176,49.593247,19000,7500,7000,"6×3"],
+["kvbb049a","kvbb049","KVBB 049 A","Казанский тракт, с. Красное (обгон запрещен)","Щ",0,58.541803,49.689403,0,0,0,"6×3"],
+["kvbb049b","kvbb049","KVBB 049 B","Казанский тракт, с. Красное (обгон запрещен)","Щ",0,58.541803,49.689403,27000,7500,5000,"6×3"],
+["kvbb050a1","kvbb050","KVBB 050 A1","Строителей, 1а - Московская МЕТРО","П",1,58.601884,49.590298,29000,10000,5000,"6×3"],
+["kvbb050a2","kvbb050","KVBB 050 A2","Строителей, 1а - Московская МЕТРО","П",1,58.601884,49.590298,32000,10000,5000,"6×3"],
+["kvbb050b1","kvbb050","KVBB 050 B1","Строителей, 1а - Московская МЕТРО","П",1,58.601884,49.590298,29000,10000,5000,"6×3"],
+["kvbb050b2","kvbb050","KVBB 050 B2","Строителей, 1а - Московская МЕТРО","П",1,58.601884,49.590298,29000,10000,5000,"6×3"],
+["kvbb050b3","kvbb050","KVBB 050 B3","Строителей, 1а - Московская МЕТРО","П",1,58.601884,49.590298,29000,10000,5000,"6×3"],
+["kvbb051a","kvbb051","KVBB 051 A","Лепсе, 20","Щ",1,58.620199,49.634216,0,0,0,"6×3"],
+["kvbb051b","kvbb051","KVBB 051 B","Лепсе, 20","Щ",1,58.620199,49.634216,0,0,0,"6×3"],
+["kvbb052a","kvbb052","KVBB 052 A","Р. Ердякова - Сельхозпроезд","Щ",1,58.605491,49.635123,32000,7500,5000,"6×3"],
+["kvbb052b","kvbb052","KVBB 052 B","Р. Ердякова - Сельхозпроезд","Щ",1,58.605491,49.635123,32000,7500,5000,"6×3"],
+["kvbb053a","kvbb053","KVBB 053 A","Р. Ердякова - Московская ТЦ МАКСИ","Щ",1,58.603749,49.634099,0,0,0,"6×3"],
+["kvbb053b1","kvbb053","KVBB 053 B1","Р. Ердякова - Московская ТЦ МАКСИ","П",1,58.603749,49.634099,32000,10000,5000,"6×3"],
+["kvbb053b2","kvbb053","KVBB 053 B2","Р. Ердякова - Московская ТЦ МАКСИ","П",1,58.603749,49.634099,32000,10000,5000,"6×3"],
+["kvbb053b3","kvbb053","KVBB 053 B3","Р. Ердякова - Московская ТЦ МАКСИ","П",1,58.603749,49.634099,32000,10000,5000,"6×3"],
+["kvbb054a","kvbb054","KVBB 054 A","Р.Ердякова-Сормовская","Щ",0,58.614474,49.636636,0,0,0,"6×3"],
+["kvbb054b","kvbb054","KVBB 054 B","Р.Ердякова-Сормовская","Щ",0,58.614474,49.636636,0,0,0,"6×3"],
+["kvbb055a1","kvbb055","KVBB 055 A1","Некрасова, 5 - Октябрьский пр-т, 153","П",1,58.582819,49.656189,29000,10000,5000,"6×3"],
+["kvbb055a2","kvbb055","KVBB 055 A2","Некрасова, 5 - Октябрьский пр-т, 153","П",1,58.582819,49.656189,32000,10000,5000,"6×3"],
+["kvbb055b1","kvbb055","KVBB 055 B1","Некрасова, 5 - Октябрьский пр-т, 153","П",1,58.582819,49.656189,29000,10000,5000,"6×3"],
+["kvbb055b2","kvbb055","KVBB 055 B2","Некрасова, 5 - Октябрьский пр-т, 153","П",1,58.582819,49.656189,29000,10000,5000,"6×3"],
+["kvbb055b3","kvbb055","KVBB 055 B3","Некрасова, 5 - Октябрьский пр-т, 153","П",1,58.582819,49.656189,29000,10000,5000,"6×3"],
+["kvbb057a","kvbb057","KVBB 057 A","Слободской тракт Трушковы","Щ",0,58.628002,49.80516,0,0,0,"6×3"],
+["kvbb057b","kvbb057","KVBB 057 B","Слободской тракт Трушковы","Щ",0,58.628002,49.80516,0,0,0,"6×3"],
+["kvbb058a","kvbb058","KVBB 058 A","Слободской тракт Трушковы","Щ",0,58.627806,49.805374,0,0,0,"6×3"],
+["kvbb058b","kvbb058","KVBB 058 B","Слободской тракт Трушковы","Щ",0,58.627806,49.805374,0,0,0,"6×3"],
+["kvbb059a","kvbb059","KVBB 059 A","Слободской тракт, 25 поворот на Субботиху","П",1,58.613294,49.744809,0,0,0,"6×3"],
+["kvbb059b1","kvbb059","KVBB 059 B1","Слободской тракт, 25 поворот на Субботиху","П",0,58.613294,49.744809,36000,10000,5000,"6×3"],
+["kvbb059b2","kvbb059","KVBB 059 B2","Слободской тракт, 25 поворот на Субботиху","П",0,58.613294,49.744809,36000,10000,5000,"6×3"],
+["kvbb059b3","kvbb059","KVBB 059 B3","Слободской тракт, 25 поворот на Субботиху","П",0,58.613294,49.744809,36000,10000,5000,"6×3"],
+["kvbb060a","kvbb060","KVBB 060 A","Советский тракт, 14","Щ",0,58.549552,49.60446,0,0,0,"6×3"],
+["kvbb060b","kvbb060","KVBB 060 B","Советский тракт, 14","Щ",0,58.549552,49.60446,0,0,0,"6×3"],
+["kvbb061a","kvbb061","KVBB 061 A","Советский тракт, напротив д.18","Щ",0,58.537394,49.584344,0,0,0,"6×3"],
+["kvbb061b","kvbb061","KVBB 061 B","Советский тракт, напротив д.18","Щ",0,58.537394,49.584344,0,0,0,"6×3"],
+["kvbb062a","kvbb062","KVBB 062 A","Советский тракт, после поворота на ТЭЦ 5","Щ",0,58.548859,49.602545,0,0,0,"6×3"],
+["kvbb062b","kvbb062","KVBB 062 B","Советский тракт, после поворота на ТЭЦ 5","Щ",0,58.548859,49.602545,0,0,0,"6×3"],
+["kvbb063a","kvbb063","KVBB 063 A","Дзержинского, 118/1 АВТОКОМФОРТ","Щ",0,58.646312,49.593801,0,0,0,"6×3"],
+["kvbb063b","kvbb063","KVBB 063 B","Дзержинского, 118/1 АВТОКОМФОРТ","Щ",0,58.646312,49.593801,29000,7500,5000,"6×3"],
+["kvbb064a","kvbb064","KVBB 064 A","Дзержинского, Новым мост у горы","Щ",0,58.658177,49.627889,32000,7500,5000,"6×3"],
+["kvbb064b","kvbb064","KVBB 064 B","Дзержинского, Новым мост у горы","Щ",0,58.658177,49.627889,27000,7500,5000,"6×3"],
+["kvbb065a1","kvbb065","KVBB 065 A1","Дзержинского, напротив Автосалона Mercedes, Поворот на Ганино","П",1,58.636082,49.591876,32000,10000,5000,"6×3"],
+["kvbb065a2","kvbb065","KVBB 065 A2","Дзержинского, напротив Автосалона Mercedes, Поворот на Ганино","П",1,58.636082,49.591876,36000,10000,5000,"6×3"],
+["kvbb065a3","kvbb065","KVBB 065 A3","Дзержинского, напротив Автосалона Mercedes, Поворот на Ганино","П",1,58.636082,49.591876,36000,10000,5000,"6×3"],
+["kvbb065b","kvbb065","KVBB 065 B","Дзержинского, напротив Автосалона Mercedes, Поворот на Ганино","Щ",1,58.636082,49.591876,32000,7500,5000,"6×3"],
+["kvbb066a","kvbb066","KVBB 066 A","Дзержинского, перед новым мостом 4 из города","Щ",0,58.648483,49.596147,32000,7500,5000,"6×3"],
+["kvbb066b","kvbb066","KVBB 066 B","Дзержинского, перед новым мостом 4 из города","Щ",0,58.648483,49.596147,27000,7500,5000,"6×3"],
+["kvbb067a","kvbb067","KVBB 067 A","Дзержинского, перед новым мостом 5 из города","Щ",0,58.649339,49.597102,0,0,0,"6×3"],
+["kvbb067b","kvbb067","KVBB 067 B","Дзержинского, перед новым мостом 5 из города","Щ",0,58.649339,49.597102,27000,7500,5000,"6×3"],
+["kvbb068a","kvbb068","KVBB 068 A","Дзержинского, перед новым мостом № 6 от города","Щ",0,58.650287,49.598222,32000,7500,5000,"6×3"],
+["kvbb068b","kvbb068","KVBB 068 B","Дзержинского, перед новым мостом № 6 от города","Щ",0,58.650287,49.598222,27000,7500,5000,"6×3"],
+["kvbb069a","kvbb069","KVBB 069 A","Дзержинского, перед новым мостом","Щ",0,58.670354,49.648141,0,0,0,"6×3"],
+["kvbb069b","kvbb069","KVBB 069 B","Дзержинского, перед новым мостом","Щ",0,58.670354,49.648141,0,0,0,"6×3"],
+["kvbb070a","kvbb070","KVBB 070 A","Дзержинского, 110 автосалон HAVAL PRO, TANK","Щ",1,58.642547,49.590296,0,0,0,"6×3"],
+["kvbb070b","kvbb070","KVBB 070 B","Дзержинского, 110 автосалон HAVAL PRO, TANK","Щ",1,58.642547,49.590296,29000,7500,5000,"6×3"],
+["kvbb071a","kvbb071","KVBB 071 A","Ленина, 190","П",1,58.571939,49.685156,0,0,0,"6×3"],
+["kvbb071b1","kvbb071","KVBB 071 B1","Ленина, 190","П",1,58.571939,49.685156,37000,10000,5000,"6×3"],
+["kvbb071b3","kvbb071","KVBB 071 B3","Ленина, 190","П",1,58.571939,49.685156,39000,10000,5000,"6×3"],
+["kvbb072a","kvbb072","KVBB 072 A","Казанский тракт, Лосево","Щ",0,58.55795,49.685753,0,0,0,"6×3"],
+["kvbb072b","kvbb072","KVBB 072 B","Казанский тракт, Лосево","Щ",0,58.55795,49.685753,0,0,0,"6×3"],
+["kvbb073a","kvbb073","KVBB 073 A","Казанский тракт, Корчемкино","Щ",0,58.551832,49.686301,0,0,0,"6×3"],
+["kvbb073b","kvbb073","KVBB 073 B","Казанский тракт, Корчемкино","Щ",0,58.551832,49.686301,0,0,0,"6×3"],
+["kvbb074a","kvbb074","KVBB 074 A","Казанский тракт, въезд в с. Красное при въезде в Киров","Щ",0,58.53205,49.686121,32000,7500,5000,"6×3"],
+["kvbb074b","kvbb074","KVBB 074 B","Казанский тракт, въезд в с. Красное при въезде в Киров","Щ",0,58.53205,49.686121,29000,7500,5000,"6×3"],
+["kvbb075a1","kvbb075","KVBB 075 A1","Казанский тракт, Сошени, Нововятск, Радужный","П",1,58.524074,49.68217,32000,10000,5000,"6×3"],
+["kvbb075a2","kvbb075","KVBB 075 A2","Казанский тракт, Сошени, Нововятск, Радужный","П",1,58.524074,49.68217,32000,10000,5000,"6×3"],
+["kvbb075a3","kvbb075","KVBB 075 A3","Казанский тракт, Сошени, Нововятск, Радужный","П",1,58.524074,49.68217,32000,10000,5000,"6×3"],
+["kvbb075b1","kvbb075","KVBB 075 B1","Казанский тракт, Сошени, Нововятск, Радужный","П",1,58.524074,49.68217,32000,10000,5000,"6×3"],
+["kvbb075b2","kvbb075","KVBB 075 B2","Казанский тракт, Сошени, Нововятск, Радужный","П",1,58.524074,49.68217,32000,10000,5000,"6×3"],
+["kvbb076a","kvbb076","KVBB 076 A","Казанский тракт при въезде из Красного","Щ",0,58.540241,49.689593,0,0,0,"6×3"],
+["kvbb076b","kvbb076","KVBB 076 B","Казанский тракт при въезде из Красного","Щ",0,58.540241,49.689593,29000,7500,5000,"6×3"],
+["kvbb077a1","kvbb077","KVBB 077 A1","Волкова, 1 ТЦ Фестиваль","П",1,58.592177,49.599155,32000,10000,5000,"6×3"],
+["kvbb077a2","kvbb077","KVBB 077 A2","Волкова, 1 ТЦ Фестиваль","П",1,58.592177,49.599155,32000,10000,5000,"6×3"],
+["kvbb077a3","kvbb077","KVBB 077 A3","Волкова, 1 ТЦ Фестиваль","П",1,58.592177,49.599155,32000,10000,5000,"6×3"],
+["kvbb077b1","kvbb077","KVBB 077 B1","Волкова, 1 ТЦ Фестиваль","П",1,58.592177,49.599155,27000,10000,5000,"6×3"],
+["kvbb077b2","kvbb077","KVBB 077 B2","Волкова, 1 ТЦ Фестиваль","П",1,58.592177,49.599155,27000,10000,5000,"6×3"],
+["kvbb077b3","kvbb077","KVBB 077 B3","Волкова, 1 ТЦ Фестиваль","П",1,58.592177,49.599155,27000,10000,5000,"6×3"],
+["kvbb078a","kvbb078","KVBB 078 A","Волкова, 10 ТЦ Фестиваль","Щ",0,58.591992,49.59341,0,0,0,"6×3"],
+["kvbb078b","kvbb078","KVBB 078 B","Волкова, 10 ТЦ Фестиваль","Щ",1,58.591992,49.59341,29000,7500,5000,"6×3"],
+["kvbb079a1","kvbb079","KVBB 079 A1","Упита, 13 - Московская METRO ЛЕВАЯ","П",1,58.602095,49.589998,37000,10000,7000,"6×3"],
+["kvbb079b1","kvbb079","KVBB 079 B1","Упита, 13 - Московская METRO ЛЕВАЯ","П",1,58.602095,49.589998,32000,10000,7000,"6×3"],
+["kvbb079b2","kvbb079","KVBB 079 B2","Упита, 13 - Московская METRO ЛЕВАЯ","П",1,58.602095,49.589998,32000,10000,7000,"6×3"],
+["kvbb080a1","kvbb080","KVBB 080 A1","Упита, 13 - Московская ПРАВАЯ","П",1,58.602097,49.59,37000,10000,5000,"6×3"],
+["kvbb080a2","kvbb080","KVBB 080 A2","Упита, 13 - Московская ПРАВАЯ","П",1,58.602181,49.589966,37000,10000,5000,"6×3"],
+["kvbb080a3","kvbb080","KVBB 080 A3","Упита, 13 - Московская ПРАВАЯ","П",1,58.602181,49.589966,37000,10000,5000,"6×3"],
+["kvbb080b","kvbb080","KVBB 080 B","Упита, 13 - Московская ПРАВАЯ","П",1,58.602097,49.59,0,0,0,"6×3"],
+["kvbb081a2","kvbb081","KVBB 081 A2","Щорса, 68 направление АЭРОПОРТ","П",1,58.575666,49.57255,36000,10000,5000,"6×3"],
+["kvbb081a3","kvbb081","KVBB 081 A3","Щорса, 68 направление АЭРОПОРТ","П",1,58.575666,49.57255,36000,10000,5000,"6×3"],
+["kvbb081b2","kvbb081","KVBB 081 B2","Щорса, 68 направление АЭРОПОРТ","П",1,58.575666,49.57255,36000,10000,5000,"6×3"],
+["kvbb0822a","kvbb082","KVBB 082 2A","Кольцова, 15 - Упита, 5","Щ",1,58.605433,49.59222,36000,7500,7000,"6×3"],
+["kvbb082a1","kvbb082","KVBB 082 A1","Кольцова, 15 - Упита, 5","П",1,58.605433,49.59222,36000,10000,7000,"6×3"],
+["kvbb082a2","kvbb082","KVBB 082 A2","Кольцова, 15 - Упита, 5","П",1,58.605433,49.59222,36000,10000,7000,"6×3"],
+["kvbb082a3","kvbb082","KVBB 082 A3","Кольцова, 15 - Упита, 5","П",1,58.605433,49.59222,36000,10000,7000,"6×3"],
+["kvbb082b","kvbb082","KVBB 082 B","Кольцова, 15 - Упита, 5","Щ",1,58.605433,49.59222,36000,7500,7000,"6×3"],
+["kvbb083a","kvbb083","KVBB 083 A","Воровского - Солнечная","П",1,58.595021,49.622206,0,0,0,"6×3"],
+["kvbb083b1","kvbb083","KVBB 083 B1","Воровского - Солнечная","П",1,58.595021,49.622206,50000,10000,7000,"6×3"],
+["kvbb083b3","kvbb083","KVBB 083 B3","Воровского - Солнечная","П",1,58.595021,49.622206,50000,10000,7000,"6×3"],
+["kvbb084a","kvbb084","KVBB 084 A","Лепсе, 25","Щ",1,58.61857,49.632643,0,0,0,"6×3"],
+["kvbb084b","kvbb084","KVBB 084 B","Лепсе, 25","Щ",1,58.61857,49.632643,32000,7500,5000,"6×3"],
+["kvbb085a2","kvbb085","KVBB 085 A2","Попова, 18","П",1,58.589302,49.630381,35000,10000,5000,"6×3"],
+["kvbb085a3","kvbb085","KVBB 085 A3","Попова, 18","П",1,58.589302,49.630381,35000,10000,5000,"6×3"],
+["kvbb085b","kvbb085","KVBB 085 B","Попова, 18","Щ",1,58.589302,49.630381,32000,7500,5000,"6×3"],
+["kvbb086a","kvbb086","KVBB 086 A","Советский тракт, 4","Щ",0,58.552767,49.611511,0,0,0,"6×3"],
+["kvbb086b","kvbb086","KVBB 086 B","Советский тракт, 4","Щ",0,58.552767,49.611511,0,0,0,"6×3"],
+["kvbb087a2","kvbb087","KVBB 087 A2","Попова, 12","П",1,58.576898,49.609881,32000,10000,5000,"6×3"],
+["kvbb087a3","kvbb087","KVBB 087 A3","Попова, 12","П",1,58.576899,49.609882,32000,10000,5000,"6×3"],
+["kvbb087b","kvbb087","KVBB 087 B","Попова, 12","Щ",1,58.576898,49.609881,0,0,0,"6×3"],
+["kvbb088a1","kvbb088","KVBB 088 A1","Щорса - Производственная Renault","П",1,58.576901,49.609884,50000,10000,7000,"6×3"],
+["kvbb088a2","kvbb088","KVBB 088 A2","Щорса - Производственная Renault","П",1,58.576901,49.609884,50000,10000,7000,"6×3"],
+["kvbb088b1","kvbb088","KVBB 088 B1","Щорса - Производственная Renault","П",1,58.576901,49.609884,45000,10000,7000,"6×3"],
+["kvbb088b2","kvbb088","KVBB 088 B2","Щорса - Производственная Renault","П",1,58.576901,49.609884,45000,10000,7000,"6×3"],
+["kvbb088b3","kvbb088","KVBB 088 B3","Щорса - Производственная Renault","П",1,58.576901,49.609884,45000,10000,7000,"6×3"],
+["kvbb089a1","kvbb089","KVBB 089 A1","Сурикова, 14","П",1,58.588651,49.637945,32000,10000,5000,"6×3"],
+["kvbb089a2","kvbb089","KVBB 089 A2","Сурикова, 14","П",1,58.588651,49.637945,32000,10000,5000,"6×3"],
+["kvbb089a3","kvbb089","KVBB 089 A3","Сурикова, 14","П",1,58.588651,49.637945,32000,10000,5000,"6×3"],
+["kvbb089b1","kvbb089","KVBB 089 B1","Сурикова, 14","П",1,58.588651,49.637945,29000,10000,5000,"6×3"],
+["kvbb089b2","kvbb089","KVBB 089 B2","Сурикова, 14","П",1,58.588651,49.637945,29000,10000,5000,"6×3"],
+["kvbb090a3","kvbb090","KVBB 090 A3","Попова, 6 - Воровского ТЦ Баско","П",1,58.592114,49.630162,32000,10000,5000,"6×3"],
+["kvbb090b1","kvbb090","KVBB 090 B1","Попова, 6 - Воровского ТЦ Баско","П",1,58.592114,49.630162,28000,10000,5000,"6×3"],
+["kvbb090b2","kvbb090","KVBB 090 B2","Попова, 6 - Воровского ТЦ Баско","П",1,58.592114,49.630162,28000,10000,5000,"6×3"],
+["kvbb090b3","kvbb090","KVBB 090 B3","Попова, 6 - Воровского ТЦ Баско","П",1,58.592114,49.630162,28000,10000,5000,"6×3"],
+["kvbb091a1","kvbb091","KVBB 091 A1","Дзержинского, 52 - Крупской","П",1,58.632547,49.621256,35000,10000,5000,"6×3"],
+["kvbb091b2","kvbb091","KVBB 091 B2","Дзержинского, 52 - Крупской","П",1,58.632547,49.621256,32000,10000,5000,"6×3"],
+["kvbb091b3","kvbb091","KVBB 091 B3","Дзержинского, 52 - Крупской","П",1,58.632547,49.621256,32000,10000,5000,"6×3"],
+["kvbb093a1","kvbb093","KVBB 093 A1","Ломоносова, 7","П",1,58.611936,49.60386,35000,10000,5000,"6×3"],
+["kvbb093a3","kvbb093","KVBB 093 A3","Ломоносова, 7","П",1,58.611936,49.60386,35000,10000,5000,"6×3"],
+["kvbb093b1","kvbb093","KVBB 093 B1","Ломоносова, 7","П",1,58.611936,49.60386,35000,10000,5000,"6×3"],
+["kvbb093b2","kvbb093","KVBB 093 B2","Ломоносова, 7","П",1,58.611936,49.60386,35000,10000,5000,"6×3"],
+["kvbb093b3","kvbb093","KVBB 093 B3","Ломоносова, 7","П",1,58.611936,49.60386,32000,10000,5000,"6×3"],
+["kvbb094a1","kvbb094","KVBB 094 A1","Дзержинского - Федосеева, напротив Авитека","П",1,58.634603,49.598042,29000,10000,5000,"6×3"],
+["kvbb094a2","kvbb094","KVBB 094 A2","Дзержинского - Федосеева, напротив Авитека","П",1,58.634603,49.598042,29000,10000,5000,"6×3"],
+["kvbb094a3","kvbb094","KVBB 094 A3","Дзержинского - Федосеева, напротив Авитека","П",1,58.634603,49.598042,29000,10000,5000,"6×3"],
+["kvbb094b1","kvbb094","KVBB 094 B1","Дзержинского - Федосеева, напротив Авитека","П",1,58.634603,49.598042,27000,10000,5000,"6×3"],
+["kvbb094b2","kvbb094","KVBB 094 B2","Дзержинского - Федосеева, напротив Авитека","П",1,58.634603,49.598042,27000,10000,5000,"6×3"],
+["kvbb094b3","kvbb094","KVBB 094 B3","Дзержинского - Федосеева, напротив Авитека","П",1,58.634603,49.598042,27000,10000,5000,"6×3"],
+["kvbb095a","kvbb095","KVBB 095 A","Дзержинского, перед новым мостом № 7 от города","Щ",0,58.651316,49.600075,29000,7500,5000,"6×3"],
+["kvbb095b","kvbb095","KVBB 095 B","Дзержинского, перед новым мостом № 7 от города","Щ",0,58.651316,49.600075,27000,7500,5000,"6×3"],
+["kvbb096a","kvbb096","KVBB 096 A","Московская-Хлебозаводской","П",1,58.603052,49.643951,0,0,0,"6×3"],
+["kvbb096b3","kvbb096","KVBB 096 B3","Московская-Хлебозаводской","П",1,58.603052,49.643951,42000,10000,5000,"6×3"],
+["kvbb097a1","kvbb097","KVBB 097 A1","Московская-Хлебозаводской","П",1,58.602983,49.643964,37000,10000,5000,"6×3"],
+["kvbb097a2","kvbb097","KVBB 097 A2","Московская-Хлебозаводской","П",1,58.602983,49.643964,39000,10000,5000,"6×3"],
+["kvbb097b1","kvbb097","KVBB 097 B1","Московская-Хлебозаводской","П",1,58.602983,49.643964,37000,10000,5000,"6×3"],
+["kvbb097b2","kvbb097","KVBB 097 B2","Московская-Хлебозаводской","П",1,58.602983,49.643964,37000,10000,5000,"6×3"],
+["kvbb099a1","kvbb099","KVBB 099 A1","Московская, 189 KIA, МЕТРО","П",1,58.601706,49.587471,37000,10000,5000,"6×3"],
+["kvbb099b1","kvbb099","KVBB 099 B1","Московская, 189 KIA, МЕТРО","П",1,58.601706,49.587471,29000,10000,5000,"6×3"],
+["kvbb099b2","kvbb099","KVBB 099 B2","Московская, 189 KIA, МЕТРО","П",1,58.601706,49.587471,29000,10000,5000,"6×3"],
+["kvbb099b3","kvbb099","KVBB 099 B3","Московская, 189 KIA, МЕТРО","П",1,58.601706,49.587471,29000,10000,5000,"6×3"],
+["kvbb100a1","kvbb100","KVBB 100 A1","Воровского, 123","П",1,58.597086,49.610398,50000,10000,7000,"6×3"],
+["kvbb100a3","kvbb100","KVBB 100 A3","Воровского, 123","П",1,58.597086,49.610398,50000,10000,7000,"6×3"],
+["kvbb100b1","kvbb100","KVBB 100 B1","Воровского, 123","П",1,58.597086,49.610398,37000,10000,7000,"6×3"],
+["kvbb100b2","kvbb100","KVBB 100 B2","Воровского, 123","П",1,58.597086,49.610398,37000,10000,7000,"6×3"],
+["kvbb100b3","kvbb100","KVBB 100 B3","Воровского, 123","П",1,58.597086,49.610398,37000,10000,7000,"6×3"],
+["kvbb101a","kvbb101","KVBB 101 A","Советский тракт, ГАЗС","Щ",0,58.539047,49.586579,0,0,0,"6×3"],
+["kvbb101b","kvbb101","KVBB 101 B","Советский тракт, ГАЗС","Щ",0,58.539047,49.586579,0,0,0,"6×3"],
+["kvbb102a","kvbb102","KVBB 102 A","Казанский тракт, маленькая на горе","Щ",0,58.542231,49.689292,0,0,0,"6×3"],
+["kvbb102b","kvbb102","KVBB 102 B","Казанский тракт, маленькая на горе","Щ",0,58.542231,49.689292,29000,7500,5000,"6×3"],
+["kvbb104a","kvbb104","KVBB 104 A","Слободской тракт Столбово","Щ",0,58.639486,49.844656,0,0,0,"6×3"],
+["kvbb104b","kvbb104","KVBB 104 B","Слободской тракт Столбово","Щ",0,58.639486,49.844656,0,0,0,"6×3"],
+["kvbb105a","kvbb105","KVBB 105 A","Волкова, 5 - Строителей","Щ",0,58.59217,49.591947,27000,7500,5000,"6×3"],
+["kvbb105b1","kvbb105","KVBB 105 B1","Волкова, 5 - Строителей","П",0,58.59217,49.591947,27000,10000,5000,"6×3"],
+["kvbb106a","kvbb106","KVBB 106 A","Лепсе, 42","П",1,58.612575,49.623591,0,0,0,"6×3"],
+["kvbb106b1","kvbb106","KVBB 106 B1","Лепсе, 42","П",1,58.612575,49.623591,32000,10000,5000,"6×3"],
+["kvbb106b2","kvbb106","KVBB 106 B2","Лепсе, 42","П",1,58.612575,49.623591,32000,10000,5000,"6×3"],
+["kvbb107a","kvbb107","KVBB 107 A","Советский тракт, после стеллы Киров","Щ",0,58.547986,49.602091,0,0,0,"6×3"],
+["kvbb107b","kvbb107","KVBB 107 B","Советский тракт, после стеллы Киров","Щ",0,58.547986,49.602091,0,0,0,"6×3"],
+["kvbb108a","kvbb108","KVBB 108 A","Слободской тракт, Трушково, ближе к городу","Щ",0,58.626624,49.802156,0,0,0,"6×3"],
+["kvbb108b","kvbb108","KVBB 108 B","Слободской тракт, Трушково, ближе к городу","Щ",0,58.626624,49.802156,0,0,0,"6×3"],
+["kvbb109a1","kvbb109","KVBB 109 A1","Горького, 57 - Некрасова АВТОВОКЗАЛ","П",1,58.582872,49.650995,32000,10000,5000,"6×3"],
+["kvbb109a3","kvbb109","KVBB 109 A3","Горького, 57 - Некрасова АВТОВОКЗАЛ","П",1,58.582872,49.650995,32000,10000,5000,"6×3"],
+["kvbb109b1","kvbb109","KVBB 109 B1","Горького, 57 - Некрасова АВТОВОКЗАЛ","П",1,58.582872,49.650995,29000,10000,5000,"6×3"],
+["kvbb109b2","kvbb109","KVBB 109 B2","Горького, 57 - Некрасова АВТОВОКЗАЛ","П",1,58.582872,49.650995,29000,10000,5000,"6×3"],
+["kvbb109b3","kvbb109","KVBB 109 B3","Горького, 57 - Некрасова АВТОВОКЗАЛ","П",1,58.582872,49.650995,29000,10000,5000,"6×3"],
+["kvbb110a","kvbb110","KVBB 110 A","Горького, 57 - Некрасова АВТОВОКЗАЛ ВЕРТИКАЛЬНЫЙ","Щ",1,58.582958,49.650971,32000,7500,5000,"6×3"],
+["kvbb110b","kvbb110","KVBB 110 B","Горького, 57 - Некрасова АВТОВОКЗАЛ ВЕРТИКАЛЬНЫЙ","Щ",1,58.582958,49.650971,0,0,0,"6×3"],
+["kvbb111a","kvbb111","KVBB 111 A","Горького, 53 - Некрасова АВТОВОКЗАЛ","Щ",1,58.583002,49.650884,27000,7500,5000,"6×3"],
+["kvbb111b","kvbb111","KVBB 111 B","Горького, 53 - Некрасова АВТОВОКЗАЛ","Щ",1,58.583002,49.650884,24000,7500,5000,"6×3"],
+["kvbb112a","kvbb112","KVBB 112 A","Производственная-р.Люльченка","Щ",1,58.590639,49.613262,0,0,0,"6×3"],
+["kvbb112b","kvbb112","KVBB 112 B","Производственная-р.Люльченка","Щ",1,58.590639,49.613262,0,0,0,"6×3"],
+["kvbb113a","kvbb113","KVBB 113 A","Красина, 9","Щ",1,58.578374,49.638569,0,0,0,"6×3"],
+["kvbb113b","kvbb113","KVBB 113 B","Красина, 9","Щ",1,58.578374,49.638569,0,0,0,"6×3"],
+["kvbb114a1","kvbb114","KVBB 114 A1","Октябрьский пр-т, 65 пл. Лепсе гл. вход на стадион \"Родина\"","П",1,58.623763,49.648849,50000,10000,7000,"6×3"],
+["kvbb114a3","kvbb114","KVBB 114 A3","Октябрьский пр-т, 65 пл. Лепсе гл. вход на стадион \"Родина\"","П",1,58.623763,49.648849,50000,10000,7000,"6×3"],
+["kvbb114b1","kvbb114","KVBB 114 B1","Октябрьский пр-т, 65 пл. Лепсе гл. вход на стадион \"Родина\"","П",1,58.623763,49.648849,36000,10000,7000,"6×3"],
+["kvbb114b2","kvbb114","KVBB 114 B2","Октябрьский пр-т, 65 пл. Лепсе гл. вход на стадион \"Родина\"","П",1,58.623763,49.648849,36000,10000,7000,"6×3"],
+["kvbb114b3","kvbb114","KVBB 114 B3","Октябрьский пр-т, 65 пл. Лепсе гл. вход на стадион \"Родина\"","П",1,58.623763,49.648849,36000,10000,7000,"6×3"],
+["kvbb115a2","kvbb115","KVBB 115 A2","Красина, 5 ТЦ \"Небо\"","П",1,58.579584,49.642563,34000,10000,5000,"6×3"],
+["kvbb115a3","kvbb115","KVBB 115 A3","Красина, 5 ТЦ \"Небо\"","П",1,58.579584,49.642563,34000,10000,5000,"6×3"],
+["kvbb115b","kvbb115","KVBB 115 B","Красина, 5 ТЦ \"Небо\"","Щ",1,58.579584,49.642563,29000,7500,5000,"6×3"],
+["kvbb116a","kvbb116","KVBB 116 A","Дзержинского, 89 ост. Слобода Малые Ряби","Щ",0,58.648169,49.596308,29000,7500,5000,"6×3"],
+["kvbb116b","kvbb116","KVBB 116 B","Дзержинского, 89 ост. Слобода Малые Ряби","Щ",0,58.648169,49.596308,27000,7500,5000,"6×3"],
+["kvbb117a","kvbb117","KVBB 117 A","Дзержинского, 85 напротив HAVAL PRO, TANK","Щ",0,58.642412,49.590876,0,0,0,"6×3"],
+["kvbb117b","kvbb117","KVBB 117 B","Дзержинского, 85 напротив HAVAL PRO, TANK","Щ",0,58.642412,49.590876,29000,7500,5000,"6×3"],
+["kvbb118a","kvbb118","KVBB 118 A","Дзержинского, 79","Щ",0,58.63634,49.59211,0,0,0,"6×3"],
+["kvbb118b","kvbb118","KVBB 118 B","Дзержинского, 79","Щ",0,58.63634,49.59211,0,0,0,"6×3"],
+["kvbb119a","kvbb119","KVBB 119 A","Дзержинского, 79","Щ",0,58.63834,49.590221,0,0,0,"6×3"],
+["kvbb119b","kvbb119","KVBB 119 B","Дзержинского, 79","Щ",0,58.63834,49.590221,0,0,0,"6×3"],
+["kvbb120a1","kvbb120","KVBB 120 A1","Щорса, напротив дома 72 направление АЭРОПОРТ","П",1,58.57446,49.568178,29000,10000,5000,"6×3"],
+["kvbb120a2","kvbb120","KVBB 120 A2","Щорса, напротив дома 72 направление АЭРОПОРТ","П",1,58.57446,49.568178,29000,10000,5000,"6×3"],
+["kvbb120a3","kvbb120","KVBB 120 A3","Щорса, напротив дома 72 направление АЭРОПОРТ","П",1,58.57446,49.568178,29000,10000,5000,"6×3"],
+["kvbb120b1","kvbb120","KVBB 120 B1","Щорса, напротив дома 72 направление АЭРОПОРТ","П",1,58.574464,49.568178,27000,10000,5000,"6×3"],
+["kvbb120b2","kvbb120","KVBB 120 B2","Щорса, напротив дома 72 направление АЭРОПОРТ","П",1,58.57446,49.568178,27000,10000,5000,"6×3"],
+["kvbb120b3","kvbb120","KVBB 120 B3","Щорса, напротив дома 72 направление АЭРОПОРТ","П",1,58.57446,49.568178,27000,10000,5000,"6×3"],
+["kvbb121a","kvbb121","KVBB 121 A","Ленина напротив АЗС Лукойл","П",1,58.585445,49.682349,0,0,0,"6×3"],
+["kvbb121b1","kvbb121","KVBB 121 B1","Ленина напротив АЗС Лукойл","П",1,58.585445,49.682349,39000,10000,5000,"6×3"],
+["kvbb121b3","kvbb121","KVBB 121 B3","Ленина напротив АЗС Лукойл","П",1,58.585445,49.682349,39000,10000,5000,"6×3"],
+["kvbb122a2","kvbb122","KVBB 122 A2","Октябрьский пр-кт - Сев. Кольцо ЛЕВАЯ","П",1,58.622635,49.652201,34000,10000,5000,"6×3"],
+["kvbb123a1","kvbb123","KVBB 123 A1","Октябрьский пр-кт - Сев. Кольцо ПРАВАЯ","П",1,58.622561,49.652209,34000,10000,5000,"6×3"],
+["kvbb123a3","kvbb123","KVBB 123 A3","Октябрьский пр-кт - Сев. Кольцо ПРАВАЯ","П",1,58.622561,49.652209,36000,10000,5000,"6×3"],
+["kvbb126a","kvbb126","KVBB 126 A","Волкова, 5 ТЦ Фестиваль","Щ",0,58.592149,49.593647,32000,7500,5000,"6×3"],
+["kvbb126b","kvbb126","KVBB 126 B","Волкова, 5 ТЦ Фестиваль","Щ",0,58.592149,49.593647,29000,7500,5000,"6×3"],
+["kvbb127a1","kvbb127","KVBB 127 A1","Щорса, 36 КТ \"Дружба\"","П",1,58.577692,49.628093,32000,10000,5000,"6×3"],
+["kvbb127a2","kvbb127","KVBB 127 A2","Щорса, 36 КТ \"Дружба\"","П",1,58.577692,49.628093,32000,10000,5000,"6×3"],
+["kvbb127a3","kvbb127","KVBB 127 A3","Щорса, 36 КТ \"Дружба\"","П",1,58.577692,49.628093,32000,10000,5000,"6×3"],
+["kvbb127b1","kvbb127","KVBB 127 B1","Щорса, 36 КТ \"Дружба\"","П",1,58.577692,49.628093,29000,10000,5000,"6×3"],
+["kvbb127b2","kvbb127","KVBB 127 B2","Щорса, 36 КТ \"Дружба\"","П",1,58.577692,49.628093,29000,10000,5000,"6×3"],
+["kvbb127b3","kvbb127","KVBB 127 B3","Щорса, 36 КТ \"Дружба\"","П",1,58.577692,49.628093,29000,10000,5000,"6×3"],
+["kvbb128a","kvbb128","KVBB 128 A","Дзержинского-Шорина","Щ",0,58.631614,49.627864,0,0,0,"6×3"],
+["kvbb128b","kvbb128","KVBB 128 B","Дзержинского-Шорина","Щ",0,58.631614,49.627864,0,0,0,"6×3"],
+["kvbb129a2","kvbb129","KVBB 129 A2","Ленинградская, 11 МОНТАЖ С ВЫШКИ","П",1,58.633509,49.61678,34000,10000,7000,"6×3"],
+["kvbb129a3","kvbb129","KVBB 129 A3","Ленинградская, 11 МОНТАЖ С ВЫШКИ","П",1,58.633509,49.61678,34000,10000,7000,"6×3"],
+["kvbb129b1","kvbb129","KVBB 129 B1","Ленинградская, 11 МОНТАЖ С ВЫШКИ","П",1,58.633509,49.61678,32000,10000,7000,"6×3"],
+["kvbb129b2","kvbb129","KVBB 129 B2","Ленинградская, 11 МОНТАЖ С ВЫШКИ","П",1,58.633509,49.61678,32000,10000,7000,"6×3"],
+["kvbb129b3","kvbb129","KVBB 129 B3","Ленинградская, 11 МОНТАЖ С ВЫШКИ","П",1,58.633509,49.61678,29000,10000,7000,"6×3"],
+["kvbb130a","kvbb130","KVBB 130 A","Лепсе, 27","Щ",0,58.617563,49.631913,0,0,0,"6×3"],
+["kvbb130b","kvbb130","KVBB 130 B","Лепсе, 27","Щ",0,58.617563,49.631913,29000,7500,5000,"6×3"],
+["kvbb131a","kvbb131","KVBB 131 A","Щорса, 26","Щ",1,58.577726,49.635228,0,0,0,"6×3"],
+["kvbb131b","kvbb131","KVBB 131 B","Щорса, 26","Щ",1,58.577726,49.635228,29000,7500,5000,"6×3"],
+["kvbb132a2","kvbb132","KVBB 132 A2","Московская - Производственная","П",1,58.602451,49.613048,32000,10000,5000,"6×3"],
+["kvbb132b2","kvbb132","KVBB 132 B2","Московская - Производственная","П",1,58.602451,49.613048,36000,10000,5000,"6×3"],
+["kvbb133a1","kvbb133","KVBB 133 A1","Горького, 22 - Воровского, 52 ЦУМ","П",1,58.59236,49.650866,36000,10000,5000,"6×3"],
+["kvbb133b1","kvbb133","KVBB 133 B1","Горького, 22 - Воровского, 52 ЦУМ","П",1,58.59236,49.650866,34000,10000,5000,"6×3"],
+["kvbb133b3","kvbb133","KVBB 133 B3","Горького, 22 - Воровского, 52 ЦУМ","П",1,58.59236,49.650866,34000,10000,5000,"6×3"],
+["kvbb134a1","kvbb134","KVBB 134 A1","Московская - Солнечная МАКСИ, VW, JAC, HAVAL, CHANGAN, Mitsubishi, Hyundai","П",1,58.60311,49.632167,37000,10000,5000,"6×3"],
+["kvbb134b1","kvbb134","KVBB 134 B1","Московская - Солнечная МАКСИ, VW, JAC, HAVAL, CHANGAN, Mitsubishi, Hyundai","П",1,58.60311,49.632167,34000,10000,5000,"6×3"],
+["kvbb134b2","kvbb134","KVBB 134 B2","Московская - Солнечная МАКСИ, VW, JAC, HAVAL, CHANGAN, Mitsubishi, Hyundai","П",1,58.60311,49.632167,34000,10000,5000,"6×3"],
+["kvbb134b3","kvbb134","KVBB 134 B3","Московская - Солнечная МАКСИ, VW, JAC, HAVAL, CHANGAN, Mitsubishi, Hyundai","П",1,58.60311,49.632167,34000,10000,5000,"6×3"],
+["kvbb135a1","kvbb135","KVBB 135 A1","Московская, 109 VW, JAC, HAVAL, CHANGAN","П",1,58.602968,49.626011,36000,10000,7000,"6×3"],
+["kvbb135a2","kvbb135","KVBB 135 A2","Московская, 109 VW, JAC, HAVAL, CHANGAN","П",1,58.602968,49.626011,36000,10000,7000,"6×3"],
+["kvbb135a3","kvbb135","KVBB 135 A3","Московская, 109 VW, JAC, HAVAL, CHANGAN","П",1,58.602968,49.626011,36000,10000,7000,"6×3"],
+["kvbb135b1","kvbb135","KVBB 135 B1","Московская, 109 VW, JAC, HAVAL, CHANGAN","П",1,58.602968,49.626011,36000,10000,7000,"6×3"],
+["kvbb135b2","kvbb135","KVBB 135 B2","Московская, 109 VW, JAC, HAVAL, CHANGAN","П",1,58.602968,49.626011,36000,10000,7000,"6×3"],
+["kvbb136a2","kvbb136","KVBB 136 A2","Дзержинского - Луганская","П",1,58.633878,49.610883,42000,10000,5000,"6×3"],
+["kvbb136b2","kvbb136","KVBB 136 B2","Дзержинского - Луганская","П",1,58.633878,49.610883,35000,10000,5000,"6×3"],
+["kvbb136b3","kvbb136","KVBB 136 B3","Дзержинского - Луганская","П",1,58.633878,49.610883,35000,10000,5000,"6×3"],
+["kvbb137a1","kvbb137","KVBB 137 A1","Ломоносова, 22 - Московская","П",1,58.603577,49.613689,36000,10000,5000,"6×3"],
+["kvbb137a3","kvbb137","KVBB 137 A3","Ломоносова, 22 - Московская","П",1,58.603577,49.613689,36000,10000,5000,"6×3"],
+["kvbb137b1","kvbb137","KVBB 137 B1","Ломоносова, 22 - Московская","П",1,58.603577,49.613689,34000,10000,5000,"6×3"],
+["kvbb137b2","kvbb137","KVBB 137 B2","Ломоносова, 22 - Московская","П",1,58.603577,49.613689,34000,10000,5000,"6×3"],
+["kvbb137b3","kvbb137","KVBB 137 B3","Ломоносова, 22 - Московская","П",1,58.603577,49.613689,34000,10000,5000,"6×3"],
+["kvbb138a","kvbb138","KVBB 138 A","Производственная - Щорса Автосалон JAECOO, OMODA","П",1,58.578097,49.609973,0,0,0,"6×3"],
+["kvbb138b1","kvbb138","KVBB 138 B1","Производственная - Щорса Автосалон JAECOO, OMODA","П",1,58.578097,49.609973,36000,10000,7000,"6×3"],
+["kvbb138b2","kvbb138","KVBB 138 B2","Производственная - Щорса Автосалон JAECOO, OMODA","П",1,58.578098,49.609974,36000,10000,7000,"6×3"],
+["kvbb138b3","kvbb138","KVBB 138 B3","Производственная - Щорса Автосалон JAECOO, OMODA","П",1,58.578099,49.609975,36000,10000,7000,"6×3"],
+["kvbb139a","kvbb139","KVBB 139 A","Ленина-Хлыновская","П",1,58.581459,49.68488,0,0,0,"6×3"],
+["kvbb139b","kvbb139","KVBB 139 B","Ленина-Хлыновская","П",1,58.581459,49.68488,0,0,0,"6×3"],
+["kvbb140a1","kvbb140","KVBB 140 A1","Ленина, 181 - Тимирязева","П",1,58.574845,49.684545,43000,10000,5000,"6×3"],
+["kvbb140a2","kvbb140","KVBB 140 A2","Ленина, 181 - Тимирязева","П",1,58.574845,49.684545,38000,10000,5000,"6×3"],
+["kvbb140b2","kvbb140","KVBB 140 B2","Ленина, 181 - Тимирязева","П",1,58.574845,49.684545,43000,10000,5000,"6×3"],
+["kvbb141a2","kvbb141","KVBB 141 A2","Производственная - Солнечная, 17","П",1,58.592579,49.613952,37000,10000,5000,"6×3"],
+["kvbb141b","kvbb141","KVBB 141 B","Производственная - Солнечная, 17","Щ",1,58.592579,49.613952,29000,7500,5000,"6×3"],
+["kvbb142a2","kvbb142","KVBB 142 A2","Московская, 118 Автосалон VW, JAC, HAVAL, CHANGAN","П",1,58.602594,49.62218,37000,10000,5000,"6×3"],
+["kvbb142b","kvbb142","KVBB 142 B","Московская, 118 Автосалон VW, JAC, HAVAL, CHANGAN","П",1,58.602594,49.62218,0,0,0,"6×3"],
+["kvbb143a","kvbb143","KVBB 143 A","Попова, 5 ЗАПРЕТ ЗАСТРЙЩИКОВ","Щ",0,58.590078,49.629877,32000,7500,5000,"6×3"],
+["kvbb143b","kvbb143","KVBB 143 B","Попова, 5 ЗАПРЕТ ЗАСТРЙЩИКОВ","Щ",0,58.590078,49.629877,32000,7500,5000,"6×3"],
+["kvbb144a","kvbb144","KVBB 144 A","Маклина, 59","Щ",1,58.595845,49.647793,0,0,0,"6×3"],
+["kvbb144b","kvbb144","KVBB 144 B","Маклина, 59","Щ",1,58.595845,49.647793,0,0,0,"6×3"],
+["kvbb145a2","kvbb145","KVBB 145 A2","Казанский тракт, Трактовая, 4 Нововятск, поворот на Радужный","П",1,58.525607,49.682176,34000,10000,5000,"6×3"],
+["kvbb145a3","kvbb145","KVBB 145 A3","Казанский тракт, Трактовая, 4 Нововятск, поворот на Радужный","П",1,58.525607,49.682176,32000,10000,5000,"6×3"],
+["kvbb145b","kvbb145","KVBB 145 B","Казанский тракт, Трактовая, 4 Нововятск, поворот на Радужный","П",1,58.525607,49.682176,0,0,0,"6×3"],
+["kvbb146a1","kvbb146","KVBB 146 A1","Воровского, 106","П",1,58.596854,49.596217,50000,10000,7000,"6×3"],
+["kvbb146a2","kvbb146","KVBB 146 A2","Воровского, 106","П",1,58.596854,49.596217,50000,10000,7000,"6×3"],
+["kvbb146a3","kvbb146","KVBB 146 A3","Воровского, 106","П",1,58.596854,49.596217,50000,10000,7000,"6×3"],
+["kvbb146b1","kvbb146","KVBB 146 B1","Воровского, 106","П",1,58.596854,49.596217,44000,10000,7000,"6×3"],
+["kvbb146b2","kvbb146","KVBB 146 B2","Воровского, 106","П",1,58.596854,49.596217,44000,10000,7000,"6×3"],
+["kvbb146b3","kvbb146","KVBB 146 B3","Воровского, 106","П",1,58.596854,49.596217,44000,10000,7000,"6×3"],
+["kvbb1482b","kvbb148","KVBB 148 2B","Московская - Солнечная, МАКСИ, разделительная полоса, VW, JAC, HAVAL, CHANGAN, Mitsubishi","Щ",1,58.602601,49.631322,36000,7500,7000,"6×3"],
+["kvbb148a1","kvbb148","KVBB 148 A1","Московская - Солнечная, МАКСИ, разделительная полоса, VW, JAC, HAVAL, CHANGAN, Mitsubishi","П",1,58.602601,49.631322,44000,10000,7000,"6×3"],
+["kvbb148a2","kvbb148","KVBB 148 A2","Московская - Солнечная, МАКСИ, разделительная полоса, VW, JAC, HAVAL, CHANGAN, Mitsubishi","П",1,58.602601,49.631322,44000,10000,7000,"6×3"],
+["kvbb148b","kvbb148","KVBB 148 B","Московская - Солнечная, МАКСИ, разделительная полоса, VW, JAC, HAVAL, CHANGAN, Mitsubishi","Щ",1,58.602601,49.631322,36000,7500,7000,"6×3"],
+["kvbb148c","kvbb148","KVBB 148 C","Московская - Солнечная, МАКСИ, разделительная полоса, VW, JAC, HAVAL, CHANGAN, Mitsubishi","Щ",1,58.602601,49.631322,0,0,0,"6×3"],
+["kvbb149a1","kvbb149","KVBB 149 A1","Солнечная, поворот к ТЦ МАКСИ, ТЦ Планета","П",1,58.601642,49.630251,32000,10000,5000,"6×3"],
+["kvbb149a3","kvbb149","KVBB 149 A3","Солнечная, поворот к ТЦ МАКСИ, ТЦ Планета","П",1,58.601642,49.630251,29000,10000,5000,"6×3"],
+["kvbb149b","kvbb149","KVBB 149 B","Солнечная, поворот к ТЦ МАКСИ, ТЦ Планета","Щ",1,58.601642,49.630251,0,0,0,"6×3"],
+["kvbb150a","kvbb150","KVBB 150 A","Горького, 56","Щ",0,58.579999,49.652261,0,0,0,"6×3"],
+["kvbb150b","kvbb150","KVBB 150 B","Горького, 56","Щ",0,58.579999,49.652261,0,0,0,"6×3"],
+["kvbb151a","kvbb151","KVBB 151 A","Советский тракт, 16","Щ",0,58.548044,49.602207,0,0,0,"6×3"],
+["kvbb151b","kvbb151","KVBB 151 B","Советский тракт, 16","Щ",0,58.548044,49.602207,0,0,0,"6×3"],
+["kvbb152a","kvbb152","KVBB 152 A","Советский тракт напротив дома 10","Щ",0,58.549708,49.603707,0,0,0,"6×3"],
+["kvbb152b","kvbb152","KVBB 152 B","Советский тракт напротив дома 10","Щ",0,58.549708,49.603707,0,0,0,"6×3"],
+["kvbb153a","kvbb153","KVBB 153 A","Советский тракт АЗС Движение","Щ",0,58.523125,49.582794,0,0,0,"6×3"],
+["kvbb153b","kvbb153","KVBB 153 B","Советский тракт АЗС Движение","Щ",0,58.523125,49.582794,0,0,0,"6×3"],
+["kvbb154a","kvbb154","KVBB 154 A","Советский тракт, после АЗС Движение","Щ",0,58.525257,49.582987,0,0,0,"6×3"],
+["kvbb154b","kvbb154","KVBB 154 B","Советский тракт, после АЗС Движение","Щ",0,58.525257,49.582987,0,0,0,"6×3"],
+["kvbb155a","kvbb155","KVBB 155 A","Советский тракт, автодром","Щ",0,58.54194,49.591575,0,0,0,"6×3"],
+["kvbb155b","kvbb155","KVBB 155 B","Советский тракт, автодром","Щ",0,58.54194,49.591575,0,0,0,"6×3"],
+["kvbb156a","kvbb156","KVBB 156 A","Солнечная, 8","Щ",0,58.600008,49.627915,0,0,0,"6×3"],
+["kvbb156b","kvbb156","KVBB 156 B","Солнечная, 8","Щ",0,58.600008,49.627915,0,0,0,"6×3"],
+["kvbb157a","kvbb157","KVBB 157 A","Октябрьский пр-т, 79, Хлебозавод","П",1,58.621179,49.653933,0,0,0,"6×3"],
+["kvbb157b","kvbb157","KVBB 157 B","Октябрьский пр-т, 79, Хлебозавод","Щ",1,58.621179,49.653933,0,0,0,"6×3"],
+["kvbb158a2","kvbb158","KVBB 158 A2","Воровского, 102","П",1,58.596889,49.598575,50000,10000,7000,"6×3"],
+["kvbb158b1","kvbb158","KVBB 158 B1","Воровского, 102","П",1,58.596889,49.598575,37000,10000,7000,"6×3"],
+["kvbb158b2","kvbb158","KVBB 158 B2","Воровского, 102","П",1,58.596889,49.598575,37000,10000,7000,"6×3"],
+["kvbb158b3","kvbb158","KVBB 158 B3","Воровского, 102","П",1,58.596889,49.598575,37000,10000,7000,"6×3"],
+["kvbb159a1","kvbb159","KVBB 159 A1","Горького, 18 - Воровского, 81 ЦУМ","П",1,58.593836,49.650838,40000,10000,5000,"6×3"],
+["kvbb159a2","kvbb159","KVBB 159 A2","Горького, 18 - Воровского, 81 ЦУМ","П",1,58.593836,49.650838,40000,10000,5000,"6×3"],
+["kvbb159a3","kvbb159","KVBB 159 A3","Горького, 18 - Воровского, 81 ЦУМ","П",1,58.593836,49.650838,40000,10000,5000,"6×3"],
+["kvbb159b1","kvbb159","KVBB 159 B1","Горького, 18 - Воровского, 81 ЦУМ","П",1,58.593836,49.650838,29000,10000,5000,"6×3"],
+["kvbb159b2","kvbb159","KVBB 159 B2","Горького, 18 - Воровского, 81 ЦУМ","П",1,58.593836,49.650838,29000,10000,5000,"6×3"],
+["kvbb159b3","kvbb159","KVBB 159 B3","Горького, 18 - Воровского, 81 ЦУМ","П",1,58.593836,49.650838,29000,10000,5000,"6×3"],
+["kvbb1602b","kvbb160","KVBB 160 2B","Строителей - Риммы Юровской","Щ",1,58.587016,49.591059,36000,7500,7000,"6×3"],
+["kvbb160a","kvbb160","KVBB 160 A","Строителей - Риммы Юровской","Щ",0,58.587016,49.591059,0,0,0,"6×3"],
+["kvbb160b1","kvbb160","KVBB 160 B1","Строителей - Риммы Юровской","П",1,58.587016,49.591059,36000,10000,7000,"6×3"],
+["kvbb160b2","kvbb160","KVBB 160 B2","Строителей - Риммы Юровской","П",1,58.587016,49.591059,36000,10000,7000,"6×3"],
+["kvbb160b3","kvbb160","KVBB 160 B3","Строителей - Риммы Юровской","П",1,58.587016,49.591059,36000,10000,7000,"6×3"],
+["kvbb161a1","kvbb161","KVBB 161 A1","Горького, 36 у Цирка напротив дома 47","П",1,58.587033,49.651196,32000,10000,5000,"6×3"],
+["kvbb161a2","kvbb161","KVBB 161 A2","Горького, 36 у Цирка напротив дома 47","П",1,58.587033,49.651196,32000,10000,5000,"6×3"],
+["kvbb161a3","kvbb161","KVBB 161 A3","Горького, 36 у Цирка напротив дома 47","П",1,58.587033,49.651196,32000,10000,5000,"6×3"],
+["kvbb161b1","kvbb161","KVBB 161 B1","Горького, 36 у Цирка напротив дома 47","П",1,58.587033,49.651196,37000,10000,5000,"6×3"],
+["kvbb161b2","kvbb161","KVBB 161 B2","Горького, 36 у Цирка напротив дома 47","П",1,58.587033,49.651196,37000,10000,5000,"6×3"],
+["kvbb162a1","kvbb162","KVBB 162 A1","Воровского, 92 ВТБ, ТЦ ОАЗИС","П",1,58.596818,49.616136,32000,10000,5000,"6×3"],
+["kvbb162a2","kvbb162","KVBB 162 A2","Воровского, 92 ВТБ, ТЦ ОАЗИС","П",1,58.596818,49.616136,32000,10000,5000,"6×3"],
+["kvbb162a3","kvbb162","KVBB 162 A3","Воровского, 92 ВТБ, ТЦ ОАЗИС","П",1,58.596818,49.616136,32000,10000,5000,"6×3"],
+["kvbb162b1","kvbb162","KVBB 162 B1","Воровского, 92 ВТБ, ТЦ ОАЗИС","П",1,58.596818,49.616136,29000,10000,5000,"6×3"],
+["kvbb162b2","kvbb162","KVBB 162 B2","Воровского, 92 ВТБ, ТЦ ОАЗИС","П",1,58.596818,49.616136,29000,10000,5000,"6×3"],
+["kvbb162b3","kvbb162","KVBB 162 B3","Воровского, 92 ВТБ, ТЦ ОАЗИС","П",1,58.596818,49.616136,29000,10000,5000,"6×3"],
+["kvbb163a","kvbb163","KVBB 163 A","Щорса, 200м от АЗС Лукойла направление АЭРОПОРТ","Щ",0,58.577556,49.578913,32000,7500,5000,"6×3"],
+["kvbb163b","kvbb163","KVBB 163 B","Щорса, 200м от АЗС Лукойла направление АЭРОПОРТ","Щ",0,58.577556,49.578913,0,0,0,"6×3"],
+["kvbb164a","kvbb164","KVBB 164 A","Казанский тракт, с. Красное, ул. Советская, 40","Щ",0,58.539287,49.689562,0,0,0,"6×3"],
+["kvbb164b","kvbb164","KVBB 164 B","Казанский тракт, с. Красное, ул. Советская, 40","Щ",0,58.539287,49.689562,29000,7500,5000,"6×3"],
+["kvbb165a","kvbb165","KVBB 165 A","Менделеева, 19 - Московская","Щ",0,58.60337,49.603332,32000,7500,5000,"6×3"],
+["kvbb165b","kvbb165","KVBB 165 B","Менделеева, 19 - Московская","Щ",0,58.60337,49.603332,0,0,0,"6×3"],
+["kvbb166a","kvbb166","KVBB 166 A","Щорса, напротив дома 66 направление АЭРОПОРТ","Щ",1,58.577601,49.591508,32000,7500,5000,"6×3"],
+["kvbb166b","kvbb166","KVBB 166 B","Щорса, напротив дома 66 направление АЭРОПОРТ","Щ",0,58.577601,49.591508,0,0,0,"6×3"],
+["kvbb167a","kvbb167","KVBB 167 A","Щорса, на повороте","Щ",0,58.57741,49.578055,0,0,0,"6×3"],
+["kvbb167b","kvbb167","KVBB 167 B","Щорса, на повороте","Щ",0,58.57741,49.578055,0,0,0,"6×3"],
+["kvbb168a","kvbb168","KVBB 168 A","Риммы Юровской, 11","Щ",1,58.587,49.592755,32000,7500,5000,"6×3"],
+["kvbb168b","kvbb168","KVBB 168 B","Риммы Юровской, 11","Щ",0,58.587,49.592755,0,0,0,"6×3"],
+["kvbb169a1","kvbb169","KVBB 169 A1","Ульяновская, напротив д. 24","П",1,58.585242,49.58551,39000,10000,5000,"6×3"],
+["kvbb169b2","kvbb169","KVBB 169 B2","Ульяновская, напротив д. 24","П",1,58.585242,49.58551,37000,10000,5000,"6×3"],
+["kvbb169b3","kvbb169","KVBB 169 B3","Ульяновская, напротив д. 24","П",1,58.585242,49.58551,35000,10000,5000,"6×3"],
+["kvbb170a","kvbb170","KVBB 170 A","Дзержинского, Новый Мост, сл. Филейка","Щ",0,58.654354,49.611422,0,0,0,"6×3"],
+["kvbb170b","kvbb170","KVBB 170 B","Дзержинского, Новый Мост, сл. Филейка","Щ",0,58.654354,49.611422,27000,7500,5000,"6×3"],
+["kvbb171a","kvbb171","KVBB 171 A","Дзержинского, 79Б, Автосалоны CHERY, Mercedes-Benz, NISSAN","Щ",0,58.639026,49.589985,27000,7500,5000,"6×3"],
+["kvbb171b","kvbb171","KVBB 171 B","Дзержинского, 79Б, Автосалоны CHERY, Mercedes-Benz, NISSAN","Щ",0,58.639026,49.589985,27000,7500,5000,"6×3"],
+["kvbb172a","kvbb172","KVBB 172 A","Дзержинского, 79Б, Автосалоны CHERY, Mercedes-Benz, NISSAN","Щ",0,58.636198,49.592406,29000,7500,5000,"6×3"],
+["kvbb172b","kvbb172","KVBB 172 B","Дзержинского, 79Б, Автосалоны CHERY, Mercedes-Benz, NISSAN","Щ",0,58.636199,49.592407,27000,7500,5000,"6×3"],
+["kvbb173a2","kvbb173","KVBB 173 A2","Горького, 26","П",1,58.592364,49.650882,32000,10000,5000,"6×3"],
+["kvbb173a3","kvbb173","KVBB 173 A3","Горького, 26","П",1,58.592364,49.650882,32000,10000,5000,"6×3"],
+["kvbb173b1","kvbb173","KVBB 173 B1","Горького, 26","П",1,58.592364,49.650882,29000,10000,5000,"6×3"],
+["kvbb173b2","kvbb173","KVBB 173 B2","Горького, 26","П",1,58.592364,49.650882,29000,10000,5000,"6×3"],
+["kvbb173b3","kvbb173","KVBB 173 B3","Горького, 26","П",1,58.592364,49.650882,29000,10000,5000,"6×3"],
+["kvbb174a","kvbb174","KVBB 174 A","Московская, 157","Щ",1,58.602617,49.605444,0,0,0,"6×3"],
+["kvbb174b","kvbb174","KVBB 174 B","Московская, 157","Щ",1,58.602617,49.605444,29000,7500,5000,"6×3"],
+["kvbb175a","kvbb175","KVBB 175 A","Казанский тракт перед Слобода с. Красное","Щ",0,58.544332,49.688542,29000,7500,5000,"6×3"],
+["kvbb175b","kvbb175","KVBB 175 B","Казанский тракт перед Слобода с. Красное","Щ",0,58.544332,49.688542,29000,7500,5000,"6×3"],
+["kvbb176a","kvbb176","KVBB 176 A","Казанский тракт с. Красное","Щ",0,58.543365,49.688886,29000,7500,5000,"6×3"],
+["kvbb176b","kvbb176","KVBB 176 B","Казанский тракт с. Красное","Щ",0,58.543365,49.688886,27000,7500,5000,"6×3"],
+["kvbb177a","kvbb177","KVBB 177 A","Дзержинского у завода Авитек","Щ",1,58.634767,49.600315,0,0,0,"6×3"],
+["kvbb177b","kvbb177","KVBB 177 B","Дзержинского у завода Авитек","Щ",0,58.634767,49.600315,27000,7500,5000,"6×3"],
+["kvbb178a","kvbb178","KVBB 178 A","Горького, напротив д. 1Б","Щ",0,58.601701,49.650473,32000,7500,5000,"6×3"],
+["kvbb178b","kvbb178","KVBB 178 B","Горького, напротив д. 1Б","Щ",0,58.601701,49.650473,0,0,0,"6×3"],
+["kvbb179a1","kvbb179","KVBB 179 A1","Потребкооперации, 2 МИКРОРАЙН Слобода Курочкины","П",1,58.569452,49.623258,32000,10000,5000,"6×3"],
+["kvbb179a3","kvbb179","KVBB 179 A3","Потребкооперации, 2 МИКРОРАЙН Слобода Курочкины","П",1,58.569452,49.623258,32000,10000,5000,"6×3"],
+["kvbb179b1","kvbb179","KVBB 179 B1","Потребкооперации, 2 МИКРОРАЙН Слобода Курочкины","П",1,58.569452,49.623258,32000,10000,5000,"6×3"],
+["kvbb179b2","kvbb179","KVBB 179 B2","Потребкооперации, 2 МИКРОРАЙН Слобода Курочкины","П",1,58.569452,49.623258,32000,10000,5000,"6×3"],
+["kvbb179b3","kvbb179","KVBB 179 B3","Потребкооперации, 2 МИКРОРАЙН Слобода Курочкины","П",1,58.569452,49.623258,32000,10000,5000,"6×3"],
+["kvbb180a1","kvbb180","KVBB 180 A1","Ломоносова, 6 ГИПЕР МАКСИ","П",1,58.612235,49.603829,36000,10000,5000,"6×3"],
+["kvbb180a2","kvbb180","KVBB 180 A2","Ломоносова, 6 ГИПЕР МАКСИ","П",1,58.612236,49.60383,36000,10000,5000,"6×3"],
+["kvbb180a3","kvbb180","KVBB 180 A3","Ломоносова, 6 ГИПЕР МАКСИ","П",1,58.612236,49.60383,32000,10000,5000,"6×3"],
+["kvbb180b","kvbb180","KVBB 180 B","Ломоносова, 6 ГИПЕР МАКСИ","Щ",1,58.612235,49.603829,0,0,0,"6×3"],
+["kvbb181a1","kvbb181","KVBB 181 A1","Московская, 140","П",1,58.602252,49.598545,32000,10000,5000,"6×3"],
+["kvbb181a3","kvbb181","KVBB 181 A3","Московская, 140","П",1,58.602252,49.598545,32000,10000,5000,"6×3"],
+["kvbb181b","kvbb181","KVBB 181 B","Московская, 140","Щ",1,58.602252,49.598545,32000,7500,5000,"6×3"],
+["kvbb182a","kvbb182","KVBB 182 A","Воровского, 43 ТЦ Европейский","П",1,58.594008,49.665763,0,0,0,"6×3"],
+["kvbb182b1","kvbb182","KVBB 182 B1","Воровского, 43 ТЦ Европейский","П",1,58.594008,49.665763,44000,10000,5000,"6×3"],
+["kvbb182b2","kvbb182","KVBB 182 B2","Воровского, 43 ТЦ Европейский","П",1,58.594008,49.665763,44000,10000,5000,"6×3"],
+["kvbb183a","kvbb183","KVBB 183 A","Дамба Макарье Красный Химик","Щ",0,58.617938,49.703304,0,0,0,"6×3"],
+["kvbb183b1","kvbb183","KVBB 183 B1","Дамба Макарье Красный Химик","П",1,58.617938,49.703304,35000,10000,5000,"6×3"],
+["kvbb183b2","kvbb183","KVBB 183 B2","Дамба Макарье Красный Химик","П",1,58.617938,49.703304,35000,10000,5000,"6×3"],
+["kvbb183b3","kvbb183","KVBB 183 B3","Дамба Макарье Красный Химик","П",1,58.617938,49.703304,32000,10000,5000,"6×3"],
+["kvbb184a","kvbb184","KVBB 184 A","Дамба Макарье, Слобода Дымково","Щ",0,58.618213,49.705538,0,0,0,"6×3"],
+["kvbb184b1","kvbb184","KVBB 184 B1","Дамба Макарье, Слобода Дымково","П",1,58.618213,49.705538,37000,10000,5000,"6×3"],
+["kvbb184b2","kvbb184","KVBB 184 B2","Дамба Макарье, Слобода Дымково","П",1,58.618213,49.705538,35000,10000,5000,"6×3"],
+["kvbb185a","kvbb185","KVBB 185 A","мкрн. Нововятск, ул. Совесткая, напротив дома, 9","Щ",0,58.516593,49.689923,0,0,0,"6×3"],
+["kvbb185b","kvbb185","KVBB 185 B","мкрн. Нововятск, ул. Совесткая, напротив дома, 9","Щ",0,58.516593,49.689923,0,0,0,"6×3"],
+["kvbb186a","kvbb186","KVBB 186 A","Щорса, напротив дома 70, направление АЭРОПОРТ","Щ",0,58.515591,49.691605,29000,7500,5000,"6×3"],
+["kvbb186b","kvbb186","KVBB 186 B","Щорса, напротив дома 70, направление АЭРОПОРТ","Щ",0,58.515591,49.691605,29000,7500,5000,"6×3"],
+["kvbb187a","kvbb187","KVBB 187 A","Московская, 132","Щ",1,58.60244,49.608868,0,0,0,"6×3"],
+["kvbb187b","kvbb187","KVBB 187 B","Московская, 132","Щ",1,58.60244,49.608868,0,0,0,"6×3"],
+["kvbb188a2","kvbb188","KVBB 188 A2","Дамба АЗС \"Движение\"","П",1,58.617614,49.73502,35000,10000,5000,"6×3"],
+["kvbb188a3","kvbb188","KVBB 188 A3","Дамба АЗС \"Движение\"","П",1,58.617614,49.73502,37000,10000,5000,"6×3"],
+["kvbb188b1","kvbb188","KVBB 188 B1","Дамба АЗС \"Движение\"","П",1,58.617614,49.73502,35000,10000,5000,"6×3"],
+["kvbb188b2","kvbb188","KVBB 188 B2","Дамба АЗС \"Движение\"","П",1,58.617614,49.73502,35000,10000,5000,"6×3"],
+["kvbb188b3","kvbb188","KVBB 188 B3","Дамба АЗС \"Движение\"","П",1,58.617614,49.73502,35000,10000,5000,"6×3"],
+["kvbb189a","kvbb189","KVBB 189 A","Проезжая, 47 - Чайковского поворот на Порошино, ЮркинПарк, Академия Кавказкой Кухни","Щ",0,58.616019,49.759129,0,0,0,"6×3"],
+["kvbb189b1","kvbb189","KVBB 189 B1","Проезжая, 47 - Чайковского поворот на Порошино, ЮркинПарк, Академия Кавказкой Кухни","П",1,58.616019,49.759129,36000,10000,5000,"6×3"],
+["kvbb189b3","kvbb189","KVBB 189 B3","Проезжая, 47 - Чайковского поворот на Порошино, ЮркинПарк, Академия Кавказкой Кухни","П",1,58.616019,49.759129,36000,10000,5000,"6×3"],
+["kvbb190a","kvbb190","KVBB 190 A","Октябрьский пр-т - Свердлова, ОЦМ ЛЕВАЯ","Щ",0,58.6376,49.625971,29000,7500,5000,"6×3"],
+["kvbb191a","kvbb191","KVBB 191 A","Октябрьский пр-т - Свердлова, ОЦМ ЦЕНТР","Щ",0,58.637543,49.626041,29000,7500,5000,"6×3"],
+["kvbb192a","kvbb192","KVBB 192 A","Октябрьский пр-т - Свердлова, ОЦМ ПРАВАЯ","Щ",0,58.637495,49.626122,32000,7500,5000,"6×3"],
+["kvbb193a2","kvbb193","KVBB 193 A2","Проезжая, 50 поворот на Порошино, ЮркинПарк, Академия Кавказкой Кухни","П",1,58.616443,49.764755,35000,10000,5000,"6×3"],
+["kvbb193a3","kvbb193","KVBB 193 A3","Проезжая, 50 поворот на Порошино, ЮркинПарк, Академия Кавказкой Кухни","П",1,58.616443,49.764755,35000,10000,5000,"6×3"],
+["kvbb193b1","kvbb193","KVBB 193 B1","Проезжая, 50 поворот на Порошино, ЮркинПарк, Академия Кавказкой Кухни","П",1,58.616443,49.764755,35000,10000,5000,"6×3"],
+["kvbb193b2","kvbb193","KVBB 193 B2","Проезжая, 50 поворот на Порошино, ЮркинПарк, Академия Кавказкой Кухни","П",1,58.616443,49.764755,35000,10000,5000,"6×3"],
+["kvbb193b3","kvbb193","KVBB 193 B3","Проезжая, 50 поворот на Порошино, ЮркинПарк, Академия Кавказкой Кухни","П",1,58.616443,49.764755,35000,10000,5000,"6×3"],
+["kvbb194a","kvbb194","KVBB 194 A","Дамба, напротив АЗС \"ЛУКОИЛ\" МОНТАЖ С ВЫШКИ","П",1,58.618849,49.713732,0,0,0,"6×3"],
+["kvbb194b1","kvbb194","KVBB 194 B1","Дамба, напротив АЗС \"ЛУКОИЛ\" МОНТАЖ С ВЫШКИ","П",1,58.618849,49.713732,36000,10000,7000,"6×3"],
+["kvbb200a1","kvbb200","KVBB 200 A1","Коминтерн, площадь Коминтерновская - П. Корчагина","П",1,58.643922,49.721793,38000,10000,5000,"6×3"],
+["kvbb200a2","kvbb200","KVBB 200 A2","Коминтерн, площадь Коминтерновская - П. Корчагина","П",1,58.643922,49.721793,36000,10000,5000,"6×3"],
+["kvbb200a3","kvbb200","KVBB 200 A3","Коминтерн, площадь Коминтерновская - П. Корчагина","П",1,58.643922,49.721793,36000,10000,5000,"6×3"],
+["kvbb201a1","kvbb201","KVBB 201 A1","Ердякова, 11","П",1,58.61021,49.636237,32000,10000,5000,"6×3"],
+["kvbb201a2","kvbb201","KVBB 201 A2","Ердякова, 11","П",1,58.61021,49.636237,32000,10000,5000,"6×3"],
+["kvbb201a3","kvbb201","KVBB 201 A3","Ердякова, 11","П",1,58.61021,49.636237,29000,10000,5000,"6×3"],
+["kvbb201b1","kvbb201","KVBB 201 B1","Ердякова, 11","П",1,58.61021,49.636237,29000,10000,5000,"6×3"],
+["kvbb201b2","kvbb201","KVBB 201 B2","Ердякова, 11","П",1,58.61021,49.636237,29000,10000,5000,"6×3"],
+["kvbb201b3","kvbb201","KVBB 201 B3","Ердякова, 11","П",1,58.61021,49.636237,29000,10000,5000,"6×3"],
+["kvbb202a","kvbb202","KVBB 202 A","Коминтерн, ул. П. Корчагина, напротив д. 227","Щ",0,58.666284,49.676028,0,0,0,"6×3"],
+["kvbb202b","kvbb202","KVBB 202 B","Коминтерн, ул. П. Корчагина, напротив д. 227","Щ",0,58.666284,49.676028,29000,7500,5000,"6×3"],
+["kvbb306a","kvbb306","KVBB 306 A","Свердлова, 23","Щ",1,58.641206,49.62034,0,0,0,"6×3"],
+["kvbb306b","kvbb306","KVBB 306 B","Свердлова, 23","Щ",1,58.641206,49.62034,0,0,0,"6×3"],
+["kvbb308a3","kvbb308","KVBB 308 A3","Октябрьский пр-т - Дзержинского, ОЦМ","П",1,58.631177,49.634821,44000,12000,8000,"9×3"],
+["kvbb310a1","kvbb310","KVBB 310 A1","Щорса, 85 ЭкоЯрмарка","П",1,58.57765,49.604592,36000,10000,5000,"6×3"],
+["kvbb310a3","kvbb310","KVBB 310 A3","Щорса, 85 ЭкоЯрмарка","П",1,58.57765,49.604592,36000,10000,5000,"6×3"],
+["kvbb310b1","kvbb310","KVBB 310 B1","Щорса, 85 ЭкоЯрмарка","П",1,58.57765,49.604592,41000,10000,5000,"6×3"],
+["kvbb311a","kvbb311","KVBB 311 A","Базовая, 10","П",1,58.564553,49.608143,0,0,0,"6×3"],
+["kvbb311b","kvbb311","KVBB 311 B","Базовая, 10","Щ",1,58.564553,49.608143,0,0,0,"6×3"],
+["kvbb313a1","kvbb313","KVBB 313 A1","Солнечная - Воровского Спартак Строительный Гипермаркет","П",1,58.596884,49.623556,32000,10000,5000,"6×3"],
+["kvbb313b","kvbb313","KVBB 313 B","Солнечная - Воровского Спартак Строительный Гипермаркет","Щ",1,58.596884,49.623556,0,0,0,"6×3"],
+["kvbb315a1","kvbb315","KVBB 315 A1","Дамба Макарье - поворот на МР Красный Химик","П",1,58.617565,49.700037,35000,10000,5000,"6×3"],
+["kvbb315b1","kvbb315","KVBB 315 B1","Дамба Макарье - поворот на МР Красный Химик","П",1,58.617565,49.700037,36000,10000,5000,"6×3"],
+["kvbb315b2","kvbb315","KVBB 315 B2","Дамба Макарье - поворот на МР Красный Химик","П",1,58.617565,49.700037,36000,10000,5000,"6×3"],
+["kvbb315b3","kvbb315","KVBB 315 B3","Дамба Макарье - поворот на МР Красный Химик","П",1,58.617565,49.700037,36000,10000,5000,"6×3"],
+["kvbb317a","kvbb317","KVBB 317 A","Совесткий тракт, напротив ГАЗС","Щ",1,58.541228,49.591142,0,0,0,"6×3"],
+["kvbb317b","kvbb317","KVBB 317 B","Совесткий тракт, напротив ГАЗС","Щ",1,58.541228,49.591142,0,0,0,"6×3"],
+["kvbb318a","kvbb318","KVBB 318 A","Московская, 205, у Метро","Щ",1,58.597604,49.574476,0,0,0,"6×3"],
+["kvbb318b","kvbb318","KVBB 318 B","Московская, 205, у Метро","Щ",1,58.597604,49.574476,0,0,0,"6×3"],
+["kvbb319a","kvbb319","KVBB 319 A","Советская, 32","Щ",1,58.53401,49.687588,0,0,0,"6×3"],
+["kvbb319b","kvbb319","KVBB 319 B","Советская, 32","Щ",1,58.53401,49.687588,0,0,0,"6×3"],
+["kvcb001b1","kvcb001","KVCB 001 B1","Воровского, 46 ЦУМ","СБ",1,58.593636,49.656574,29000,5500,4000,"3,7×2,7"],
+["kvcb001b3","kvcb001","KVCB 001 B3","Воровского, 46 ЦУМ","СБ",1,58.593636,49.656574,32000,5500,4000,"3,7×2,7"],
+["kvcb002a1","kvcb002","KVCB 002 A1","Московская, 80","СБ",1,58.602463,49.609854,22000,5500,4000,"3,7×2,7"],
+["kvcb002a2","kvcb002","KVCB 002 A2","Московская, 80","СБ",1,58.602463,49.609854,22000,5500,4000,"3,7×2,7"],
+["kvcb002a3","kvcb002","KVCB 002 A3","Московская, 80","СБ",1,58.602463,49.609854,22000,5500,4000,"3,7×2,7"],
+["kvcb002b2","kvcb002","KVCB 002 B2","Московская, 80","СБ",1,58.602463,49.609854,27000,5500,4000,"3,7×2,7"],
+["kvcb002b3","kvcb002","KVCB 002 B3","Московская, 80","СБ",1,58.602463,49.609854,22000,5500,4000,"3,7×2,7"],
+["kvcb003a1","kvcb003","KVCB 003 A1","Воровского, 60","СБ",1,58.593281,49.641352,27000,5500,4000,"3,7×2,7"],
+["kvcb003a2","kvcb003","KVCB 003 A2","Воровского, 60","СБ",1,58.593281,49.641352,27000,5500,4000,"3,7×2,7"],
+["kvcb003a3","kvcb003","KVCB 003 A3","Воровского, 60","СБ",1,58.593281,49.641352,27000,5500,4000,"3,7×2,7"],
+["kvcb003b1","kvcb003","KVCB 003 B1","Воровского, 60","СБ",1,58.593281,49.641352,22000,5500,4000,"3,7×2,7"],
+["kvcb003b2","kvcb003","KVCB 003 B2","Воровского, 60","СБ",1,58.593281,49.641352,22000,5500,4000,"3,7×2,7"],
+["kvcb003b3","kvcb003","KVCB 003 B3","Воровского, 60","СБ",1,58.593281,49.641352,22000,5500,4000,"3,7×2,7"],
+["kvcb004a1","kvcb004","KVCB 004 A1","Московская, 102 МАКСИ","СБ",1,58.602937,49.635121,27000,5500,4000,"3,7×2,7"],
+["kvcb004b1","kvcb004","KVCB 004 B1","Московская, 102 МАКСИ","СБ",1,58.602937,49.635121,22000,5500,4000,"3,7×2,7"],
+["kvcb004b3","kvcb004","KVCB 004 B3","Московская, 102 МАКСИ","СБ",1,58.602937,49.635121,22000,5500,4000,"3,7×2,7"],
+["kvcb005a1","kvcb005","KVCB 005 A1","Московская, 103 МАКСИ","СБ",1,58.603126,49.63551,23000,5500,4000,"3,7×2,7"],
+["kvcb005a2","kvcb005","KVCB 005 A2","Московская, 103 МАКСИ","СБ",1,58.603126,49.63551,23000,5500,4000,"3,7×2,7"],
+["kvcb005b1","kvcb005","KVCB 005 B1","Московская, 103 МАКСИ","СБ",1,58.603126,49.63551,22000,5500,4000,"3,7×2,7"],
+["kvcb005b2","kvcb005","KVCB 005 B2","Московская, 103 МАКСИ","СБ",1,58.603126,49.63551,22000,5500,4000,"3,7×2,7"],
+["kvcb005b3","kvcb005","KVCB 005 B3","Московская, 103 МАКСИ","СБ",1,58.603126,49.63551,22000,5500,4000,"3,7×2,7"],
+["kvcb006a1","kvcb006","KVCB 006 A1","Московская, 118","СБ",1,58.602553,49.620538,22000,5500,4000,"3,7×2,7"],
+["kvcb006a2","kvcb006","KVCB 006 A2","Московская, 118","СБ",1,58.602553,49.620538,22000,5500,4000,"3,7×2,7"],
+["kvcb006b","kvcb006","KVCB 006 B","Московская, 118","СБ",1,58.602553,49.620538,19000,5500,4000,"4×3"],
+["kvcb007a1","kvcb007","KVCB 007 A1","Владимирская (К. Маркса), 118","СБ",1,58.591387,49.669292,29000,5500,4000,"3,7×2,7"],
+["kvcb007a2","kvcb007","KVCB 007 A2","Владимирская (К. Маркса), 118","СБ",1,58.591387,49.669292,29000,5500,4000,"3,7×2,7"],
+["kvcb007a3","kvcb007","KVCB 007 A3","Владимирская (К. Маркса), 118","СБ",1,58.591387,49.669292,29000,5500,4000,"3,7×2,7"],
+["kvcb007b1","kvcb007","KVCB 007 B1","Владимирская (К. Маркса), 118","СБ",1,58.591387,49.669292,29000,5500,4000,"3,7×2,7"],
+["kvcb007b2","kvcb007","KVCB 007 B2","Владимирская (К. Маркса), 118","СБ",1,58.591387,49.669292,29000,5500,4000,"3,7×2,7"],
+["kvcb007b3","kvcb007","KVCB 007 B3","Владимирская (К. Маркса), 118","СБ",1,58.591387,49.669292,29000,5500,4000,"3,7×2,7"],
+["kvcb008a1","kvcb008","KVCB 008 A1","Владимирская (К. Маркса), 126","СБ",1,58.589999,49.669438,27000,5500,4000,"3,7×2,7"],
+["kvcb008a2","kvcb008","KVCB 008 A2","Владимирская (К. Маркса), 126","СБ",1,58.589999,49.669438,27000,5500,4000,"3,7×2,7"],
+["kvcb008a3","kvcb008","KVCB 008 A3","Владимирская (К. Маркса), 126","СБ",1,58.589999,49.669438,27000,5500,4000,"3,7×2,7"],
+["kvcb008b1","kvcb008","KVCB 008 B1","Владимирская (К. Маркса), 126","СБ",1,58.589999,49.669438,27000,5500,4000,"3,7×2,7"],
+["kvcb008b2","kvcb008","KVCB 008 B2","Владимирская (К. Маркса), 126","СБ",1,58.589999,49.669438,27000,5500,4000,"3,7×2,7"],
+["kvcb008b3","kvcb008","KVCB 008 B3","Владимирская (К. Маркса), 126","СБ",1,58.589999,49.669438,27000,5500,4000,"3,7×2,7"],
+["kvcb009a1","kvcb009","KVCB 009 A1","Московская, 130 остановка Мечта","СБ",1,58.602463,49.609854,19000,5500,4000,"3,7×2,7"],
+["kvcb009a2","kvcb009","KVCB 009 A2","Московская, 130 остановка Мечта","СБ",1,58.602463,49.609854,19000,5500,4000,"3,7×2,7"],
+["kvcb010a2","kvcb010","KVCB 010 A2","Октябрьский пр-т, 149 - Азина напротив дома, 70 ЦИРК","СБ",1,58.585277,49.657888,29000,5500,4000,"3,7×2,7"],
+["kvcb010b1","kvcb010","KVCB 010 B1","Октябрьский пр-т, 149 - Азина напротив дома, 70 ЦИРК","СБ",1,58.585277,49.657888,29000,5500,4000,"3,7×2,7"],
+["kvcb010b2","kvcb010","KVCB 010 B2","Октябрьский пр-т, 149 - Азина напротив дома, 70 ЦИРК","СБ",1,58.585277,49.657888,29000,5500,4000,"3,7×2,7"],
+["kvcb010b3","kvcb010","KVCB 010 B3","Октябрьский пр-т, 149 - Азина напротив дома, 70 ЦИРК","СБ",1,58.585277,49.657888,29000,5500,4000,"3,7×2,7"],
+["kvcf001a2","kvcf001","KVCF 001 A2","Владимирская (К. Маркса), 112 - Воровского, ост. Администрация города, 1","СФ",1,58.593406,49.668929,9000,3000,1000,"1,2×1,8"],
+["kvcf001a4","kvcf001","KVCF 001 A4","Владимирская (К. Маркса), 112 - Воровского, ост. Администрация города, 1","СФ",1,58.593406,49.668929,9000,3000,1000,"1,2×1,8"],
+["kvcf002a2","kvcf002","KVCF 002 A2","Владимирская (К. Маркса), 112 - Воровского, ост. Администрация города, 2","СФ",1,58.593406,49.668929,9000,3000,1000,"1,2×1,8"],
+["kvcf002a3","kvcf002","KVCF 002 A3","Владимирская (К. Маркса), 112 - Воровского, ост. Администрация города, 2","СФ",1,58.593406,49.668929,9000,3000,1000,"1,2×1,8"],
+["kvcf002a4","kvcf002","KVCF 002 A4","Владимирская (К. Маркса), 112 - Воровского, ост. Администрация города, 2","СФ",1,58.593406,49.668929,9000,3000,1000,"1,2×1,8"],
+["kvcf002b4","kvcf002","KVCF 002 B4","Владимирская (К. Маркса), 112 - Воровского, ост. Администрация города, 2","СФ",1,58.593406,49.668929,9000,3000,1000,"1,2×1,8"],
+["kvcf003a2","kvcf003","KVCF 003 A2","Владимирская (К. Маркса), 147 - Пролетарская, ост. ул. Пролетарская","СФ",1,58.589102,49.669232,8000,3000,1000,"1,2×1,8"],
+["kvcf003b1","kvcf003","KVCF 003 B1","Владимирская (К. Маркса), 147 - Пролетарская, ост. ул. Пролетарская","СФ",1,58.589102,49.669232,8000,3000,1000,"1,2×1,8"],
+["kvcf005a4","kvcf005","KVCF 005 A4","Воровского, 54 ост. ул. Горького","СФ",1,58.593458,49.64826,8000,3000,1000,"1,2×1,8"],
+["kvcf005b","kvcf005","KVCF 005 B","Воровского, 54 ост. ул. Горького СТАТИКА","СФ",1,58.593458,49.64826,8000,3000,1000,"1,2×1,8"],
+["kvcf006a2","kvcf006","KVCF 006 A2","Воровского, 42 ТЦ Росинка","СФ",1,58.593756,49.66316,8000,3000,1000,"1,2×1,8"],
+["kvcf006a3","kvcf006","KVCF 006 A3","Воровского, 42 ТЦ Росинка","СФ",1,58.593756,49.66316,8000,3000,1000,"1,2×1,8"],
+["kvcf006a4","kvcf006","KVCF 006 A4","Воровского, 42 ТЦ Росинка","СФ",1,58.593756,49.66316,8000,3000,1000,"1,2×1,8"],
+["kvcf006b","kvcf006","KVCF 006 B","Воровского, 42 ТЦ Росинка СТАТИКА","СФ",1,58.593756,49.66316,8000,3000,1000,"1,2×1,8"],
+["kvcf007a1","kvcf007","KVCF 007 A1","Воровского, 42 ТЦ Росинка 2","СФ",1,58.593756,49.663783,8000,3000,1000,"1,2×1,8"],
+["kvcf007a3","kvcf007","KVCF 007 A3","Воровского, 42 ТЦ Росинка 2","СФ",1,58.593756,49.663783,8000,3000,1000,"1,2×1,8"],
+["kvcf007a4","kvcf007","KVCF 007 A4","Воровского, 42 ТЦ Росинка 2","СФ",1,58.593756,49.663783,8000,3000,1000,"1,2×1,8"],
+["kvcf007b","kvcf007","KVCF 007 B","Воровского, 42 ТЦ Росинка 2 СТАТИКА","СФ",1,58.593756,49.663783,8000,3000,1000,"1,2×1,8"],
+["kvcf008a2","kvcf008","KVCF 008 A2","Воровского, 32 Европейский","СФ",1,58.593756,49.666164,8000,3000,1000,"1,2×1,8"],
+["kvcf008a3","kvcf008","KVCF 008 A3","Воровского, 32 Европейский","СФ",1,58.593756,49.666164,8000,3000,1000,"1,2×1,8"],
+["kvcf008a4","kvcf008","KVCF 008 A4","Воровского, 32 Европейский","СФ",1,58.593756,49.666164,8000,3000,1000,"1,2×1,8"],
+["kvcf008b","kvcf008","KVCF 008 B","Воровского, 32 Европейский СТАТИКА","СФ",1,58.593756,49.666164,8000,3000,1000,"1,2×1,8"],
+["kvcf009a1","kvcf009","KVCF 009 A1","Воровского, 32 Европейский 2","СФ",1,58.593756,49.667111,8000,3000,1000,"1,2×1,8"],
+["kvcf009a2","kvcf009","KVCF 009 A2","Воровского, 32 Европейский 2","СФ",1,58.593756,49.667111,8000,3000,1000,"1,2×1,8"],
+["kvcf009a3","kvcf009","KVCF 009 A3","Воровского, 32 Европейский 2","СФ",1,58.593756,49.667111,8000,3000,1000,"1,2×1,8"],
+["kvcf009a4","kvcf009","KVCF 009 A4","Воровского, 32 Европейский 2","СФ",1,58.593756,49.667111,8000,3000,1000,"1,2×1,8"],
+["kvcf009b1","kvcf009","KVCF 009 B1","Воровского, 32 Европейский 2","СФ",1,58.593756,49.667111,8000,3000,1000,"1,2×1,8"],
+["kvcf009b2","kvcf009","KVCF 009 B2","Воровского, 32 Европейский 2","СФ",1,58.593756,49.667111,8000,3000,1000,"1,2×1,8"],
+["kvcf009b3","kvcf009","KVCF 009 B3","Воровского, 32 Европейский 2","СФ",1,58.593756,49.667111,8000,3000,1000,"1,2×1,8"],
+["kvcf009b4","kvcf009","KVCF 009 B4","Воровского, 32 Европейский 2","СФ",1,58.593756,49.667111,8000,3000,1000,"1,2×1,8"],
+["kvcf010a3","kvcf010","KVCF 010 A3","Воровского, 71 Сытный двор","СФ",1,58.593921,49.664348,9000,3000,1000,"1,2×1,8"],
+["kvcf010b2","kvcf010","KVCF 010 B2","Воровского, 71 Сытный двор","СФ",1,58.593921,49.664348,9000,3000,1000,"1,2×1,8"],
+["kvcf010b3","kvcf010","KVCF 010 B3","Воровского, 71 Сытный двор","СФ",1,58.593921,49.664348,9000,3000,1000,"1,2×1,8"],
+["kvcf010b4","kvcf010","KVCF 010 B4","Воровского, 71 Сытный двор","СФ",1,58.593921,49.664348,9000,3000,1000,"1,2×1,8"],
+["kvcf011a1","kvcf011","KVCF 011 A1","Владимирская (К. Маркса), 35","СФ",1,58.610972,49.667151,8000,3000,1000,"1,2×1,8"],
+["kvcf011a2","kvcf011","KVCF 011 A2","Владимирская (К. Маркса), 35","СФ",1,58.610972,49.667151,8000,3000,1000,"1,2×1,8"],
+["kvcf011a3","kvcf011","KVCF 011 A3","Владимирская (К. Маркса), 35","СФ",1,58.610972,49.667151,8000,3000,1000,"1,2×1,8"],
+["kvcf011b2","kvcf011","KVCF 011 B2","Владимирская (К. Маркса), 35","СФ",1,58.610972,49.667151,8000,3000,1000,"1,2×1,8"],
+["kvcf011b3","kvcf011","KVCF 011 B3","Владимирская (К. Маркса), 35","СФ",1,58.610972,49.667151,8000,3000,1000,"1,2×1,8"],
+["kvcf011b4","kvcf011","KVCF 011 B4","Владимирская (К. Маркса), 35","СФ",1,58.610972,49.667151,8000,3000,1000,"1,2×1,8"],
+["kvcf012b","kvcf012","KVCF 012 B","Воровского, 91 ост. Рассвет СТАТИКА","СФ",0,58.593637,49.646334,8000,3000,1300,"1,2×1,8"],
+["kvcf013b","kvcf013","KVCF 013 B","Горького, 57 ост. Автовокзал СТАТИКА","СФ",0,58.582946,49.651309,8000,3000,1300,"1,2×1,8"],
+["kvcf014a","kvcf014","KVCF 014 A","Комсомольская, 34 ост. Детский мир СТАТИКА","СФ",0,58.581376,49.660306,8000,3000,1300,"1,2×1,8"],
+["kvps002a","kvps002","KVPS 002 A","Красноармейская,16 - Ленина Университет","ПЛ",1,58.591927,49.681145,18000,2500,1500,"1,4×3"],
+["kvps002b","kvps002","KVPS 002 B","Красноармейская,16 - Ленина Университет","ПЛ",1,58.591927,49.681145,18000,2500,1500,"1,4×3"],
+["kvps002c","kvps002","KVPS 002 C","Красноармейская,16 - Ленина Университет","ПЛ",1,58.591927,49.681145,18000,2500,1500,"1,4×3"],
+["kvps003c","kvps003","KVPS 003 C","Милицейская, 21 - Ленина","ПЛ",0,58.58755,49.680821,18000,2500,1500,"1,4×3"],
+["kvps004c","kvps004","KVPS 004 C","Нововятский р-н, Советская, 15 - Пушкина","ПЛ",0,58.513881,49.69381,18000,2500,1500,"1,4×3"],
+["kvps005c","kvps005","KVPS 005 C","Октябрьский пр-т, 55 Проходная Лепсе","ПЛ",1,58.626886,49.644194,15000,2500,1500,"1,4×3"],
+["kvps006b","kvps006","KVPS 006 B","Чапаева, 34","ПЛ",0,58.585572,49.645517,15000,2500,1500,"1,4×3"],
+["kvps006c","kvps006","KVPS 006 C","Чапаева, 34","ПЛ",0,58.585572,49.645517,15000,2500,1500,"1,4×3"],
+["kvps007a","kvps007","KVPS 007 A","Комсомольская, 13","ПЛ",0,58.582253,49.661745,22000,2500,1500,"1,4×3"],
+["kvps007b","kvps007","KVPS 007 B","Комсомольская, 13","ПЛ",0,58.582253,49.661745,22000,2500,1500,"1,4×3"],
+["kvps007c","kvps007","KVPS 007 C","Комсомольская, 13","ПЛ",0,58.582253,49.661745,15000,2500,1500,"1,4×3"],
+["kvps010b","kvps010","KVPS 010 B","Строителей, 40","ПЛ",1,58.598025,49.590867,18000,2500,1500,"1,4×3"],
+["kvps010c","kvps010","KVPS 010 C","Строителей, 40","ПЛ",1,58.598025,49.590867,18000,2500,1500,"1,4×3"],
+["kvps011b","kvps011","KVPS 011 B","Московская, 149 Глобус","ПЛ",1,58.602818,49.610404,18000,2500,1500,"1,4×3"],
+["kvps013c","kvps013","KVPS 013 C","Октябрьский пр-т, 57 Проходная завода Лепсе","ПЛ",1,58.626632,49.644515,15000,2500,1500,"1,4×3"],
+["kvps016a","kvps016","KVPS 016 A","Красноармейская, 26 ПЕД. Университет","ПЛ",0,58.591701,49.676976,18000,2500,1500,"1,4×3"],
+["kvps016b","kvps016","KVPS 016 B","Красноармейская, 26 ПЕД. Университет","ПЛ",0,58.591701,49.676976,18000,2500,1500,"1,4×3"],
+["kvps016c","kvps016","KVPS 016 C","Красноармейская, 26 ПЕД. Университет","ПЛ",0,58.591701,49.676976,15000,2500,1500,"1,4×3"],
+["kvps018c","kvps018","KVPS 018 C","Чистопрудненская, 1","ПЛ",0,58.567318,49.651066,18000,2500,1500,"1,4×3"],
+["kvps019b","kvps019","KVPS 019 B","Строителей пр-т, 52 - Р. Юровской, 11","ПЛ",1,58.587583,49.590862,18000,2500,1500,"1,4×3"],
+["kvps019c","kvps019","KVPS 019 C","Строителей пр-т, 52 - Р. Юровской, 11","ПЛ",1,58.587583,49.590862,18000,2500,1500,"1,4×3"],
+["kvps020b","kvps020","KVPS 020 B","Волкова, 4","ПЛ",1,58.591967,49.596865,18000,2500,1500,"1,4×3"],
+["kvps020c","kvps020","KVPS 020 C","Волкова, 4","ПЛ",1,58.591967,49.596865,18000,2500,1500,"1,4×3"],
+["kvps021a","kvps021","KVPS 021 A","Воровского, 44 ЦУМ","ПЛ",1,58.593653,49.660146,22000,2500,1500,"1,4×3"],
+["kvps021b","kvps021","KVPS 021 B","Воровского, 44 ЦУМ","ПЛ",1,58.593653,49.660146,22000,2500,1500,"1,4×3"],
+["kvps023c","kvps023","KVPS 023 C","Кольцова, 30","ПЛ",0,58.60516,49.592468,18000,2500,1500,"1,4×3"],
+["kvps024c","kvps024","KVPS 024 C","Владимирская (К. Маркса), 68 ТЕАТРАЛЬНАЯ ПЛОЩАДЬ","ПЛ",1,58.603203,49.669124,22000,2500,1500,"1,4×3"],
+["kvps025c","kvps025","KVPS 025 C","П. Корчагина, площадь Коминтерна","ПЛ",1,58.643551,49.721894,15000,2500,1500,"1,4×3"],
+["kvps026c","kvps026","KVPS 026 C","Ленина - Герцена, ост. Трифонов Монастырь","ПЛ",1,58.600235,49.681509,18000,2500,1500,"1,4×3"],
+["kvps027c","kvps027","KVPS 027 C","Октябрьский пр-т, 1 Площадь ХХ Партсъезда","ПЛ",1,58.637655,49.613544,18000,2500,1500,"1,4×3"],
+["kvps029c","kvps029","KVPS 029 C","Нововятский р-н, ул. Советская, 47 Лыжный комбинат","ПЛ",1,58.508687,49.701816,18000,2500,1500,"1,4×3"],
+["kvps030a","kvps030","KVPS 030 A","Красноармейская, 26, напротив д. 15 ПЕД.УНИВЕРСИТЕТ","ПЛ",0,58.591666,49.676008,18000,2500,1500,"1,4×3"],
+["kvps030b","kvps030","KVPS 030 B","Красноармейская, 26, напротив д. 15 ПЕД.УНИВЕРСИТЕТ","ПЛ",0,58.591666,49.676008,18000,2500,1500,"1,4×3"],
+["kvps030c","kvps030","KVPS 030 C","Красноармейская, 26, напротив д. 15 ПЕД.УНИВЕРСИТЕТ","ПЛ",0,58.591666,49.676008,18000,2500,1500,"1,4×3"],
+["kvps032c","kvps032","KVPS 032 C","Комсомольская, 23 Ювелирные ряды","ПЛ",1,58.580513,49.655578,18000,2500,1500,"1,4×3"],
+["kvps033c","kvps033","KVPS 033 C","Октябрьский пр-т, 38 (ДК \"1 Мая\")","ПЛ",1,58.615344,49.656802,15000,2500,1500,"1,4×3"],
+["kvps036a","kvps036","KVPS 036 A","Октябрьский пр-т, 19 Офтальмологическая клиника ТЦ НОРД","ПЛ",1,58.637377,49.624737,20000,2500,1500,"1,4×3"],
+["kvps036b","kvps036","KVPS 036 B","Октябрьский пр-т, 19 Офтальмологическая клиника ТЦ НОРД","ПЛ",1,58.637377,49.624737,18000,2500,1500,"1,4×3"],
+["kvps036c","kvps036","KVPS 036 C","Октябрьский пр-т, 19 Офтальмологическая клиника ТЦ НОРД","ПЛ",1,58.637377,49.624737,16000,2500,1500,"1,4×3"],
+["kvps037c","kvps037","KVPS 037 C","Нововятский р-н, микрорайон Радужный, пр-т Строителей, 5","ПЛ",0,58.50313,49.653704,18000,2500,1500,"1,4×3"],
+["kvps039c","kvps039","KVPS 039 C","Преображенская, 56 Драм Театр, Театральная Площадь","ПЛ",1,58.605179,49.666399,18000,2500,1500,"1,4×3"],
+["kvps041c","kvps041","KVPS 041 C","Воровского, 135 (ТРЦ Глобус)","ПЛ",1,58.597113,49.608202,18000,2500,1500,"1,4×3"],
+["kvps042c","kvps042","KVPS 042 C","Лепсе, 30а стадион Прометей","ПЛ",1,58.614806,49.627769,18000,2500,1500,"1,4×3"],
+["kvps043a","kvps043","KVPS 043 A","Пролетарская, 22 ТЦ Зенит","ПЛ",0,58.589531,49.679228,18000,2500,1500,"1,4×3"],
+["kvps043b","kvps043","KVPS 043 B","Пролетарская, 22 ТЦ Зенит","ПЛ",0,58.589531,49.679228,18000,2500,1500,"1,4×3"],
+["kvps044c","kvps044","KVPS 044 C","Нововятск, ул. Советская, 81 Глобус","ПЛ",0,58.505489,49.708406,14000,2500,1500,"1,4×3"],
+["kvps046c","kvps046","KVPS 046 C","Сурикова, 16","ПЛ",1,58.586915,49.638029,18000,2500,1500,"1,4×3"],
+["kvps047b","kvps047","KVPS 047 B","Нововятский р-н, микрорайон Радужный, пр-т Строителей, 3","ПЛ",0,58.502657,49.655149,18000,2500,1500,"1,4×3"],
+["kvps047c","kvps047","KVPS 047 C","Нововятский р-н, микрорайон Радужный, пр-т Строителей, 3","ПЛ",0,58.502657,49.655149,18000,2500,1500,"1,4×3"],
+["kvps048c","kvps048","KVPS 048 C","Комсомольская, 21 Ювелирные ряды","ПЛ",1,58.580808,49.656597,15000,2500,1500,"1,4×3"],
+["kvps049c","kvps049","KVPS 049 C","Октябрьский пр-т, 145, гостиница Вятка","ПЛ",1,58.591229,49.657603,18000,2500,1500,"1,4×3"],
+["kvps050c","kvps050","KVPS 050 C","Воровского - Менделеева пл. М. Конева","ПЛ",1,58.596842,49.603706,15000,2500,1500,"1,4×3"],
+["kvps051c","kvps051","KVPS 051 C","Профсоюзная, старый мост Набережная ТЦ Кристалл","ПЛ",1,58.615392,49.684081,15000,2500,1500,"1,4×3"],
+["kvps052c","kvps052","KVPS 052 C","Милицейская, 30 Ц.Рынок","ПЛ",0,58.587365,49.677192,15000,2500,1500,"1,4×3"],
+["kvps053a","kvps053","KVPS 053 A","Нововятск, Советская, 56","ПЛ",1,58.505098,49.709928,18000,2500,1500,"1,4×3"],
+["kvps053b","kvps053","KVPS 053 B","Нововятск, Советская, 56","ПЛ",1,58.505098,49.709928,18000,2500,1500,"1,4×3"],
+["kvps053c","kvps053","KVPS 053 C","Нововятск, Советская, 56","ПЛ",1,58.615392,49.684081,12000,2500,1500,"1,4×3"],
+["kvps055b","kvps055","KVPS 055 B","Свердлова, 4 Северная Больница","ПЛ",1,58.646811,49.617122,18000,2500,1500,"1,4×3"],
+["kvps055c","kvps055","KVPS 055 C","Свердлова, 4 Северная Больница","ПЛ",1,58.646811,49.617122,18000,2500,1500,"1,4×3"],
+["kvps056a","kvps056","KVPS 056 A","Чапаева, 36","ПЛ",0,58.584898,49.645535,18000,2500,1500,"1,4×3"],
+["kvps056b","kvps056","KVPS 056 B","Чапаева, 36","ПЛ",0,58.584898,49.645535,18000,2500,1500,"1,4×3"],
+["kvps056c","kvps056","KVPS 056 C","Чапаева, 36","ПЛ",0,58.584898,49.645535,18000,2500,1500,"1,4×3"],
+["kvps057c","kvps057","KVPS 057 C","Октябрьский пр-т, 145 Hilton","ПЛ",1,58.590679,49.657652,18000,2500,1500,"1,4×3"],
+["kvps058b","kvps058","KVPS 058 B","Комсомольская, напротив д. 10 Налоговая","ПЛ",1,58.584706,49.668162,18000,2500,1500,"1,4×3"],
+["kvps059b","kvps059","KVPS 059 B","Горького, 24 -Воровского р-н Цума","ПЛ",1,58.592853,49.650846,22000,2500,1500,"1,4×3"],
+["kvps059c","kvps059","KVPS 059 C","Горького, 24 -Воровского р-н Цума","ПЛ",1,58.592853,49.650846,15000,2500,1500,"1,4×3"],
+["kvps060a","kvps060","KVPS 060 A","Горького, 57 Автовокзал ТЦ Арбат","ПЛ",0,58.583711,49.650867,18000,2500,1500,"1,4×3"],
+["kvps062a","kvps062","KVPS 062 A","Пролетарская, 34 - Владимирская (К. Маркса)","ПЛ",0,58.589391,49.671101,22000,2500,1500,"1,4×3"],
+["kvps062b","kvps062","KVPS 062 B","Пролетарская, 34 - Владимирская (К. Маркса)","ПЛ",0,58.589391,49.671101,18000,2500,1500,"1,4×3"],
+["kvps062c","kvps062","KVPS 062 C","Пролетарская, 34 - Владимирская (К. Маркса)","ПЛ",0,58.589391,49.671101,18000,2500,1500,"1,4×3"],
+["kvps063a","kvps063","KVPS 063 A","Пролетарская, 24 Ц. Рынок","ПЛ",0,58.589367,49.674958,22000,2500,1500,"1,4×3"],
+["kvps063b","kvps063","KVPS 063 B","Пролетарская, 24 Ц. Рынок","ПЛ",0,58.589367,49.674958,18000,2500,1500,"1,4×3"],
+["kvps065c","kvps065","KVPS 065 C","Воровского, 105 Молокозавод","ПЛ",1,58.593424,49.634421,18000,2500,1500,"1,4×3"],
+["kvps066b","kvps066","KVPS 066 B","Лепсе, 61 напротив ТЦ Антей","ПЛ",1,58.610963,49.619886,18000,2500,1500,"1,4×3"],
+["kvps066c","kvps066","KVPS 066 C","Лепсе, 61 напротив ТЦ Антей","ПЛ",1,58.610963,49.619886,15000,2500,1500,"1,4×3"],
+["kvps067a","kvps067","KVPS 067 A","К. Либкнехта, 111 ТЦ Европейский","ПЛ",1,58.594534,49.665211,22000,2500,1500,"1,4×3"],
+["kvps067b","kvps067","KVPS 067 B","К. Либкнехта, 111 ТЦ Европейский","ПЛ",1,58.594534,49.665211,18000,2500,1500,"1,4×3"],
+["kvps067c","kvps067","KVPS 067 C","К. Либкнехта, 111 ТЦ Европейский","ПЛ",1,58.594534,49.665211,15000,2500,1500,"1,4×3"],
+["kvss001a1","kvss001","KVSS 001 A1","Воровского, 123 ВКУСНО и ТОЧКА","К",1,58.5973,49.60966,150000,45000,30000,"20×4"],
+["kvss001a3","kvss001","KVSS 001 A3","Воровского, 123 ВКУСНО и ТОЧКА","К",1,58.5973,49.60966,150000,45000,30000,"20×4"],
+["kvss001b2","kvss001","KVSS 001 B2","Воровского, 123 ВКУСНО и ТОЧКА","К",1,58.5973,49.60966,100000,45000,30000,"20×4"],
+["kvss001b3","kvss001","KVSS 001 B3","Воровского, 123 ВКУСНО и ТОЧКА","К",1,58.5973,49.60966,100000,45000,30000,"20×4"],
+["kibb001a","kibb001","KIBB 001 A","Кикнур, Советская, (у районной администрации)","Щ",0,57.306466,47.207527,32000,7500,7000,"6×3"],
+["kibb001b","kibb001","KIBB 001 B","Кикнур, Советская, (у районной администрации)","Щ",0,57.306466,47.207527,32000,7500,7000,"6×3"],
+["ktbb001a","ktbb001","KTBB 001 A","Котельнич, Кирова, 17","Щ",0,58.304827,48.342325,32000,7500,7000,"6×3"],
+["ktbb002a","ktbb002","KTBB 002 A","Котельнич, Ванеева, 32 Автовокзал","Щ",0,58.311684,48.341176,32000,7500,7000,"6×3"],
+["ktbb002b","ktbb002","KTBB 002 B","Котельнич, Ванеева, 32 Автовокзал","Щ",0,58.311684,48.341176,32000,7500,7000,"6×3"],
+["ktbb005a","ktbb005","KTBB 005 A","Котельнич, Победы, 68","Щ",0,58.293466,48.307972,32000,7500,7000,"6×3"],
+["ktbb005b","ktbb005","KTBB 005 B","Котельнич, Победы, 68","Щ",0,58.293466,48.307972,32000,7500,7000,"6×3"],
+["mrbb001a","mrbb001","MRBB 001 A","Мураши, Кирова - Пугачева","Щ",0,59.397497,48.966675,32000,7500,7000,"6×3"],
+["mrbb001b","mrbb001","MRBB 001 B","Мураши, Кирова - Пугачева","Щ",0,59.397497,48.966675,32000,7500,7000,"6×3"],
+["ombb001a","ombb001","OMBB 001 A","Омутнинск, Юных пионеров, 15","Щ",0,58.668648,52.176678,32000,7500,7000,"6×3"],
+["ombb001b","ombb001","OMBB 001 B","Омутнинск, Юных пионеров, 15","Щ",0,58.668648,52.176678,32000,7500,7000,"6×3"],
+["ombb002a","ombb002","OMBB 002 A","Омутнинск, Юных пионеров, 54","Щ",0,58.671225,52.166592,32000,7500,7000,"6×3"],
+["ombb002b","ombb002","OMBB 002 B","Омутнинск, Юных пионеров, 54","Щ",0,58.671225,52.166592,32000,7500,7000,"6×3"],
+["orlbb002a","orlbb002","ORLBB 002 A","Орлов, Баумана, 48","Щ",0,58.548194,48.898891,32000,7500,7000,"6×3"],
+["orlbb002b","orlbb002","ORLBB 002 B","Орлов, Баумана, 48","Щ",0,58.548194,48.898891,32000,7500,7000,"6×3"],
+["orlbb003a","orlbb003","ORLBB 003 A","Орлов, Ленина - Капустина","Щ",0,58.535224,48.896528,32000,7500,7000,"6×3"],
+["orlbb003b","orlbb003","ORLBB 003 B","Орлов, Ленина - Капустина","Щ",0,58.535224,48.896528,32000,7500,7000,"6×3"],
+["pigbb001a","pigbb001","PIGBB 001 A","Пижанка, Советская, 5а","Щ",0,57.457583,48.5266,32000,7500,7000,"6×3"],
+["pigbb001b","pigbb001","PIGBB 001 B","Пижанка, Советская, 5а","Щ",0,57.457583,48.5266,32000,7500,7000,"6×3"],
+["slbb002a","slbb002","SLBB 002 A","Слободской, Герцена, 92 (87)","Щ",0,58.724152,50.156419,34000,7500,7000,"6×3"],
+["slbb003a","slbb003","SLBB 003 A","Слободской, Грина, 51","Щ",0,58.724132,50.163611,34000,7500,7000,"6×3"],
+["slbb003b","slbb003","SLBB 003 B","Слободской, Грина, 51","Щ",0,58.724132,50.163611,34000,7500,7000,"6×3"],
+["slbb004b","slbb004","SLBB 004 B","Слободской, Грина, 9","Щ",0,58.724395,50.182984,34000,7500,7000,"6×3"],
+["slbb006a","slbb006","SLBB 006 A","Слободской, Грина, 37","Щ",0,58.724232,50.171336,34000,7500,7000,"6×3"],
+["sovbb001b","sovbb001","SOVBB 001 B","Советск, Строителей, напротив д. 13","Щ",0,57.579715,48.944639,32000,7500,7000,"6×3"],
+["sovbb002a","sovbb002","SOVBB 002 A","Советск, Строителей, 32","Щ",0,57.5681,48.949256,32000,7500,7000,"6×3"],
+["sovbb002b","sovbb002","SOVBB 002 B","Советск, Строителей, 32","Щ",0,57.5681,48.949256,32000,7500,7000,"6×3"],
+["yarbb001a","yarbb001","YARBB 001 A","Яранск, Кирова, 1","Щ",0,57.305178,47.874021,32000,7500,7000,"6×3"],
+["yarbb001b","yarbb001","YARBB 001 B","Яранск, Кирова, 1","Щ",0,57.305178,47.874021,32000,7500,7000,"6×3"],
+["yarbb002a","yarbb002","YARBB 002 A","Яранск, К. Маркса, 105","Щ",0,57.294856,47.876014,32000,7500,7000,"6×3"],
+["yarbb002b","yarbb002","YARBB 002 B","Яранск, К. Маркса, 105","Щ",0,57.294856,47.876014,32000,7500,7000,"6×3"],
+["yarbb003a","yarbb003","YARBB 003 A","Яранск, Первомайская, 4 - Владимирская (К. Маркса)","Щ",0,57.29635,47.875453,32000,7500,7000,"6×3"],
+["yarbb003b","yarbb003","YARBB 003 B","Яранск, Первомайская, 4 - Владимирская (К. Маркса)","Щ",0,57.29635,47.875453,32000,7500,7000,"6×3"],
+["yarbb004a","yarbb004","YARBB 004 A","Яранск, Первомайская - Тургенева Яранский СВЗ","Щ",0,57.295987,47.884958,32000,7500,7000,"6×3"],
+["yarbb004b","yarbb004","YARBB 004 B","Яранск, Первомайская - Тургенева Яранский СВЗ","Щ",0,57.295987,47.884958,32000,7500,7000,"6×3"],
+["yarbb006a","yarbb006","YARBB 006 A","Яранск, Лагуновская, 59","Щ",0,57.312424,47.861575,32000,7500,7000,"6×3"],
+["yarbb006b","yarbb006","YARBB 006 B","Яранск, Лагуновская, 59","Щ",0,57.312424,47.861575,32000,7500,7000,"6×3"],
+["yarbb007a","yarbb007","YARBB 007 A","Яранск, Революции, 2а","Щ",0,57.305133,47.871669,32000,7500,7000,"6×3"],
+["yarbb007b","yarbb007","YARBB 007 B","Яранск, Революции, 2а","Щ",0,57.305133,47.871669,32000,7500,7000,"6×3"],
+["yurbb002a","yurbb002","YURBB 002 A","Юрья, Калинина, 70","Щ",0,59.038391,49.251294,32000,7500,7000,"6×3"],
+["yurbb002b","yurbb002","YURBB 002 B","Юрья, Калинина, 70","Щ",0,59.038391,49.251294,32000,7500,7000,"6×3"]
+  ];
+  // Занятые месяцы из таблицы резервов (без названий клиентов): id_ГГГГ-ММ
+  const RESERVED=["kvbb016a1_2026-10","kvbb016a2_2026-10","kvbb016a2_2026-11","kvbb016a2_2026-12","kvbb016b_2026-10","kvbb018a3_2026-10","kvbb018a3_2026-11","kvbb018a3_2026-12","kvbb030a3_2026-10","kvbb035a3_2026-10","kvbb035a3_2026-11","kvbb035a3_2026-12","kvbb053b2_2026-10","kvbb053b2_2026-11","kvbb053b2_2026-12","kvbb071b1_2026-10","kvbb071b1_2026-11","kvbb071b1_2026-12","kvbb081a2_2026-10","kvbb081a2_2026-11","kvbb081a2_2026-12","kvbb085a2_2026-10","kvbb088a1_2026-10","kvbb097a1_2026-10","kvbb097a1_2026-11","kvbb097a1_2026-12","kvbb111a_2026-10","kvbb111a_2026-11","kvbb111a_2026-12","kvbb120a1_2026-10","kvbb120a1_2026-11","kvbb120a1_2026-12","kvbb126a_2026-10","kvbb126a_2026-11","kvbb126a_2026-12","kvbb130b_2026-10","kvbb131b_2026-10","kvbb132a2_2026-10","kvbb132a2_2026-11","kvbb132a2_2026-12","kvbb133b3_2026-10","kvbb133b3_2026-11","kvbb133b3_2026-12","kvbb134a1_2026-10","kvbb134a1_2026-11","kvbb134a1_2026-12","kvbb137b1_2026-10","kvbb137b1_2026-11","kvbb137b1_2026-12","kvbb140a1_2026-10","kvbb140a1_2026-11","kvbb140a1_2026-12","kvbb159a1_2026-10","kvbb166a_2026-10","kvbb166a_2026-11","kvbb166a_2026-12","kvbb169b3_2026-10","kvbb169b3_2026-11","kvbb169b3_2026-12","kvbb315a1_2026-10","kvbb315a1_2026-11","kvbb315a1_2026-12","kvcb002b2_2026-10","kvcb002b2_2026-11","kvcb002b2_2026-12","kvcf002a2_2026-10","kvcf002a2_2026-11","kvcf002a2_2026-12","mrbb001b_2026-10","mrbb001b_2026-11","mrbb001b_2026-12","pigbb001a_2026-10","pigbb001a_2026-11","pigbb001a_2026-12","slbb003a_2026-11","yarbb001b_2026-10","yarbb001b_2026-11","yarbb001b_2026-12","yarbb002a_2026-10","yarbb002a_2026-11","yarbb002a_2026-12","yarbb002b_2026-10","yarbb002b_2026-11","yarbb002b_2026-12","yarbb003b_2026-10","yarbb003b_2026-11","yarbb003b_2026-12","yarbb006a_2026-10","yarbb006a_2026-11","yarbb006a_2026-12"];
+  const TYPES={
+    "Щ":{name:"Щит",tag:"ЩИТ"},
+    "П":{name:"Призматрон",tag:"ПРИЗМ"},
+    "СБ":{name:"Сити-борд",tag:"СИТИ-БОРД"},
+    "СФ":{name:"Сити-формат",tag:"СИТИ-ФОРМАТ"},
+    "ПЛ":{name:"Пилларс",tag:"ПИЛЛАРС"},
+    "К":{name:"Крышная конструкция",tag:"КРЫША"}
+  };
+  const BOARDS=RAW.map(r=>({id:r[0],loc:r[1],code:r[2],side:r[2].split(" ").pop(),addr:r[3],t:r[4],type:TYPES[r[4]].name,
+    light:!!r[5],lat:r[6],lng:r[7],price:r[8]||0,print:r[9]||0,mont:r[10]||0,size:r[11]}));
+  const locId=b=>b.loc;
+  const LOCS={};
+  BOARDS.forEach(b=>{(LOCS[b.loc]=LOCS[b.loc]||{id:b.loc,code:b.code.split(" ").slice(0,-1).join(" "),addr:b.addr,lat:b.lat,lng:b.lng,boards:[]}).boards.push(b)});
+  let picked=new Set();
+  document.getElementById("factLocs").textContent=Object.keys(LOCS).length;
+  document.getElementById("factSides").textContent=BOARDS.length;
+  (function fillTicker(){
+    const tk=document.getElementById("ticker"); if(!tk) return;
+    const ls=Object.values(LOCS).filter(l=>l.code.startsWith("KVBB")).slice(0,40);
+    for(let rep=0;rep<2;rep++) ls.forEach(l=>{const s=document.createElement("span");s.textContent=l.code+" · "+l.addr;tk.appendChild(s)});
+  })();
+  const MONTHS=["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+  const MONTHS_FULL=["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+  const now=new Date();
+  document.getElementById("years").textContent=String(now.getFullYear()-2000);
+  // 12 months starting next month
+  const months=[];
+  for(let i=1;i<=12;i++){const d=new Date(now.getFullYear(),now.getMonth()+i,1);months.push({key:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"),label:MONTHS[d.getMonth()],full:MONTHS_FULL[d.getMonth()]+" "+d.getFullYear(),y:d.getFullYear()})}
+
+  const fmt=n=>n.toLocaleString("ru-RU")+" ₽";
+  const fmtP=b=>b.price?fmt(b.price):"по запросу";
+  const prodCost=b=>(b.print||0)+(b.mont||0);
+  const byId=Object.fromEntries(BOARDS.map(b=>[b.id,b]));
+  let busy=new Set(), sel=new Set(), filter="all", ready=false;
+  const DEMO_KEY="greyhound-demo-bookings";
+  function demoGet(){try{return JSON.parse(localStorage.getItem(DEMO_KEY)||"[]")}catch(_){return []}}
+  function demoAdd(keys){try{localStorage.setItem(DEMO_KEY,JSON.stringify([...new Set([...demoGet(),...keys])]))}catch(_){}}
+
+  const thead=document.querySelector("#grid thead"), tbody=document.querySelector("#grid tbody");
+  function renderHead(){
+    let h="<tr><th>Место · код · прайс/мес</th>";
+    let lastY=null;
+    months.forEach(m=>{h+="<th>"+m.label+(m.y!==lastY?"<br>"+String(m.y).slice(2):"<br>&nbsp;")+"</th>";lastY=m.y});
+    thead.innerHTML=h+"</tr>";
+  }
+  function visible(b){
+    if(filter==="all") return true;
+    if(filter==="light") return b.light;
+    if(filter==="picked") return picked.has(locId(b));
+    return b.t===filter;
+  }
+  let query="", limit=25;
+  const norm=s=>s.toLowerCase().replace(/ё/g,"е").replace(/[\s,.\-–—]+/g," ").trim();
+  const matches=b=>!query||norm(b.code+" "+b.addr+" "+b.type).includes(norm(query));
+  function renderGrid(){
+    let h="";
+    const rows=BOARDS.filter(b=>visible(b)&&matches(b));
+    document.getElementById("gridCount").textContent=rows.length?"Найдено поверхностей: "+rows.length+(rows.length>limit?", показано "+limit:""):"";
+    document.getElementById("gridNone").hidden=rows.length>0;
+    const more=document.getElementById("gridMore");
+    more.hidden=rows.length<=limit; more.textContent="Показать ещё "+Math.min(25,rows.length-limit);
+    rows.slice(0,limit).forEach(b=>{
+      h+='<tr data-loc="'+locId(b)+'"><th class="place" scope="row"><b>'+b.addr+'</b><span><span class="tag">'+TYPES[b.t].tag+'</span>'+b.code+' · '+b.size+(b.light?" · подсветка":"")+' · <span class="num">'+fmtP(b)+'</span></span></th>';
+      months.forEach(m=>{
+        const k=b.id+"_"+m.key, isBusy=busy.has(k), isSel=sel.has(k);
+        h+='<td><button type="button" class="cell'+(isBusy?" busy":"")+'" data-k="'+k+'" aria-pressed="'+isSel+'" '+(isBusy?'disabled aria-label="Занято"':'aria-label="'+b.code+", "+b.addr+", "+m.full+'"')+'>'+(isSel?"✓":"")+'</button></td>';
+      });
+      h+="</tr>";
+    });
+    tbody.innerHTML=h;
+  }
+  function renderCart(){
+    const ul=document.getElementById("cart");
+    const items=[...sel].sort();
+    let total=0, h="", onRequest=0;
+    const faces=new Set();
+    items.forEach(k=>{
+      const [id,mk]=k.split("_"), b=byId[id], m=months.find(x=>x.key===mk);
+      total+=b.price; if(!b.price) onRequest++; faces.add(id);
+      h+='<li><span>'+b.code+' · '+b.addr+' · '+(m?m.full:mk)+'</span><span class="num">'+fmtP(b)+' <button type="button" data-rm="'+k+'" aria-label="Убрать">✕</button></span></li>';
+    });
+    ul.innerHTML=h;
+    const prod=[...faces].reduce((s,id)=>s+prodCost(byId[id]),0);
+    document.getElementById("cartEmpty").hidden=items.length>0;
+    document.getElementById("total").textContent=fmt(total);
+    document.getElementById("prodRow").hidden=!prod;
+    document.getElementById("prod").textContent=fmt(prod);
+    document.getElementById("onRequest").hidden=!onRequest;
+    document.getElementById("onRequest").textContent="Позиций с ценой по запросу: "+onRequest+". Их стоимость назовёт менеджер.";
+    document.getElementById("submit").disabled=!items.length||!ready;
+  }
+  function render(){renderGrid();renderCart();renderPicked()}
+
+  // ===== Карта =====
+  const yandex=l=>"https://yandex.ru/maps/?pt="+l.lng+","+l.lat+"&z=17&l=map";
+  const google=l=>"https://www.google.com/maps?q="+l.lat+","+l.lng;
+  const freeCount=b=>months.filter(m=>!busy.has(b.id+"_"+m.key)).length;
+  const sidesText=l=>l.boards.map(b=>b.side+" — "+b.type.toLowerCase()+" "+b.size+(b.light?", подсветка":"")+", "+(b.price?fmt(b.price)+"/мес":"цена по запросу")).join("; ");
+  // ===== Яндекс.Карты =====
+  let map=null, clusterer=null; const markers={};
+  function pinData(l){
+    const prizm=l.boards.some(b=>b.t==="П"), t=prizm?"П":l.boards[0].t, wide=t.length>1;
+    return {label:t+(l.boards.length>1&&!wide?l.boards.length:""),cls:(prizm?"round":"")+(wide?" wide":""),on:picked.has(l.id)?"on":""};
+  }
+  function refreshPin(id){const pm=markers[id];if(pm)pm.properties.set(pinData(LOCS[id]))}
+  function popupHtml(l){
+    let h='<div class="ymap-pop"><div class="free" style="margin:0 0 4px">'+l.code+'</div><b>'+l.addr+"</b>";
+    l.boards.forEach(b=>{h+='<div class="row"><span>'+b.side+' · '+b.type+' '+b.size+(b.light?" · свет":"")+'</span><span class="num">'+fmtP(b)+'</span></div>'});
+    const pb=l.boards.find(b=>prodCost(b));
+    if(pb) h+='<div class="free">Печать '+fmt(pb.print)+' · монтаж '+fmt(pb.mont)+' (разово)</div>';
+    const free=l.boards.reduce((s,b)=>s+freeCount(b),0), all=l.boards.length*months.length;
+    h+='<div class="free">Свободно '+free+' из '+all+' мес. (все поверхности на год вперёд)</div>';
+    const on=picked.has(l.id);
+    h+='<button type="button" class="pick-btn'+(on?" on":"")+'" data-pick="'+l.id+'">'+(on?"Убрать из подборки":"Добавить в подборку")+'</button></div>';
+    return h;
+  }
+  function loadYmaps(){
+    return new Promise((resolve,reject)=>{
+      if(window.ymaps){ymaps.ready(resolve,reject);return}
+      const s=document.createElement("script");
+      s.src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"+(YANDEX_API_KEY?"&apikey="+encodeURIComponent(YANDEX_API_KEY):"");
+      s.onload=()=>window.ymaps?ymaps.ready(resolve,reject):reject(new Error("no ymaps"));
+      s.onerror=reject;
+      document.head.appendChild(s);
+    });
+  }
+  function openPop(id){
+    const pm=markers[id], l=LOCS[id]; if(!pm||!l) return;
+    pm.properties.set("balloonContentBody",popupHtml(l));
+    pm.balloon.open();
+  }
+  const VIEWS={center:[[58.600,49.650],14],kirov:[[58.600,49.640],12],region:[[58.100,49.300],7]};
+  async function initMap(){
+    try{await loadYmaps()}catch(_){
+      document.getElementById("map").innerHTML='<p style="padding:24px;color:var(--muted)">Яндекс.Карты не загрузились. Проверьте интернет и обновите страницу.</p>';return;
+    }
+    const v=VIEWS.kirov;
+    map=new ymaps.Map("map",{center:v[0],zoom:v[1],controls:["zoomControl","fullscreenControl"]},{suppressMapOpenBlock:true,yandexMapDisablePoiInteractivity:true});
+    map.behaviors.disable("scrollZoom");
+    map.events.add("click",()=>map.behaviors.enable("scrollZoom"));
+    const PinLayout=ymaps.templateLayoutFactory.createClass('<div class="pin ymp {{ properties.on }}"><span class="{{ properties.cls }}">{{ properties.label }}</span></div>');
+    const ClusterLayout=ymaps.templateLayoutFactory.createClass('<div class="pin ymp"><span class="round cluster">{{ properties.geoObjects.length }}</span></div>');
+    clusterer=new ymaps.Clusterer({clusterIconLayout:ClusterLayout,clusterIconShape:{type:"Circle",coordinates:[0,0],radius:20},
+      gridSize:64,maxZoom:15,hasBalloon:false,clusterDisableClickZoom:false});
+    const geo=Object.values(LOCS).map(l=>{
+      const pm=new ymaps.Placemark([l.lat,l.lng],Object.assign({hintContent:l.code+" · "+l.addr},pinData(l)),
+        {iconLayout:PinLayout,iconShape:{type:"Rectangle",coordinates:[[-18,-15],[18,15]]},openBalloonOnClick:false,balloonMaxWidth:320,balloonPanelMaxMapArea:0});
+      pm.events.add("click",()=>openPop(l.id));
+      markers[l.id]=pm;
+      return pm;
+    });
+    clusterer.add(geo);
+    map.geoObjects.add(clusterer);
+    document.addEventListener("click",e=>{
+      const btn=e.target.closest&&e.target.closest("[data-pick]"); if(!btn) return;
+      togglePick(btn.dataset.pick); map.balloon.close();
+    });
+  }
+  function zoomTo(where){
+    if(!map) return;
+    map.container.fitToViewport();
+    if(where==="picked"){
+      const pts=[...picked].map(id=>[LOCS[id].lat,LOCS[id].lng]);
+      if(pts.length===1){map.setCenter(pts[0],16);return}
+      if(pts.length){map.setBounds(ymaps.util.bounds.fromPoints(pts),{checkZoomRange:true,zoomMargin:40});return}
+    }
+    const v=VIEWS[where]||VIEWS.kirov;
+    map.setCenter(v[0],v[1]);
+  }
+  function showOnMap(id){
+    const l=LOCS[id]; if(!map||!l) return;
+    document.getElementById("map").scrollIntoView({behavior:"smooth",block:"center"});
+    map.setCenter([l.lat,l.lng],17,{duration:300}).then(()=>setTimeout(()=>openPop(id),150));
+  }
+  document.querySelectorAll("[data-zoom]").forEach(ch=>ch.addEventListener("click",()=>{
+    zoomTo(ch.dataset.zoom);
+    document.querySelectorAll("[data-zoom]").forEach(x=>x.setAttribute("aria-pressed",String(x===ch)));
+  }));
+
+  function togglePick(id){
+    if(!LOCS[id]) return;
+    picked.has(id)?picked.delete(id):picked.add(id);
+    refreshPin(id);
+    saveHash();
+    if(filter==="picked"&&!picked.size){filter="all";syncChips()}
+    render();
+  }
+  function saveHash(){
+    try{history.replaceState(null,"",picked.size?"#pick="+[...picked].join(","):location.pathname+location.search)}catch(_){}
+  }
+  function readHash(){
+    const m=location.hash.match(/^#pick=([a-z0-9,]+)$/);
+    if(m) m[1].split(",").forEach(id=>{if(LOCS[id])picked.add(id)});
+  }
+  function renderPicked(){
+    const ls=[...picked].map(id=>LOCS[id]);
+    document.getElementById("pickCount").textContent=ls.length;
+    const priced=ls.flatMap(l=>l.boards).filter(b=>b.price);
+    const minSum=ls.reduce((s,l)=>{const p=l.boards.filter(b=>b.price).map(b=>b.price);return s+(p.length?Math.min(...p):0)},0);
+    document.getElementById("pickSum").textContent=ls.length?(priced.length?"От "+fmt(minSum)+" в месяц за одну поверхность на каждой точке":"Цены по запросу"):"Выберите точки на карте";
+    document.getElementById("pickNone").hidden=ls.length>0;
+    document.getElementById("pickActions").hidden=!ls.length;
+    const chip=document.getElementById("chipPicked");
+    chip.hidden=!ls.length; chip.textContent="Из подборки на карте ("+ls.length+")";
+    document.getElementById("pickList").innerHTML=ls.map(l=>{
+      const free=l.boards.reduce((s,b)=>s+freeCount(b),0);
+      return '<li><div class="in"><span class="label">'+l.code+'</span><b>'+l.addr+'</b><div class="sides">'+l.boards.map(b=>b.side+" · "+b.type+" · "+fmtP(b)).join("<br>")+'<br>Свободно '+free+' мес. из '+(l.boards.length*months.length)+'</div>'+
+        '<div class="links"><a href="'+yandex(l)+'" target="_blank" rel="noopener">Яндекс.Карты</a><a href="'+google(l)+'" target="_blank" rel="noopener">Google Maps</a><button type="button" data-show="'+l.id+'">на карте</button><button type="button" data-row="'+l.id+'">в таблице</button></div></div>'+
+        '<button type="button" class="rm" data-unpick="'+l.id+'" aria-label="Убрать">✕</button></li>';
+    }).join("");
+  }
+  document.getElementById("pickList").addEventListener("click",e=>{
+    const t=e.target.closest("button"); if(!t) return;
+    if(t.dataset.unpick) togglePick(t.dataset.unpick);
+    if(t.dataset.show) showOnMap(t.dataset.show);
+    if(t.dataset.row) showRows(t.dataset.row);
+  });
+  function syncChips(){document.querySelectorAll(".chip[data-f]").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.f===filter)))}
+  function showRows(id){
+    filter="all"; syncChips();
+    query=LOCS[id].code; document.getElementById("gridSearch").value=query;
+    renderGrid();
+    const rows=tbody.querySelectorAll('tr[data-loc="'+id+'"]');
+    if(!rows.length) return;
+    rows[0].scrollIntoView({behavior:"smooth",block:"center"});
+    rows.forEach(r=>r.classList.add("flash")); setTimeout(()=>rows.forEach(r=>r.classList.remove("flash")),1800);
+  }
+  const searchEl=document.getElementById("gridSearch");
+  let searchTimer=null;
+  searchEl.addEventListener("input",()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{query=searchEl.value.trim();limit=25;renderGrid()},150)});
+  document.getElementById("gridMore").addEventListener("click",()=>{limit+=25;renderGrid()});
+  document.getElementById("pickBook").addEventListener("click",()=>{
+    filter="picked"; syncChips(); query=""; searchEl.value=""; limit=Math.max(limit,100); renderGrid();
+    document.getElementById("book").scrollIntoView({behavior:"smooth"});
+  });
+  document.getElementById("pickClear").addEventListener("click",()=>{
+    [...picked].forEach(id=>{picked.delete(id);refreshPin(id)});
+    saveHash(); if(filter==="picked"){filter="all";syncChips()} render();
+  });
+  function copyText(btn,text,label){
+    const done=()=>{btn.textContent="Скопировано";setTimeout(()=>btn.textContent=label,1600)};
+    const fallback=()=>{const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(_){}ta.remove()};
+    try{navigator.clipboard.writeText(text).then(done,fallback)}catch(_){fallback()}
+  }
+  document.getElementById("pickCopy").addEventListener("click",e=>{
+    const ls=[...picked].map(id=>LOCS[id]);
+    const text="Подборка рекламных мест «Грейхаунд», Киров\n\n"+ls.map((l,i)=>(i+1)+". "+l.code+", "+l.addr+"\n   "+sidesText(l)+"\n   Яндекс.Карты: "+yandex(l)+"\n   Google Maps: "+google(l)).join("\n\n")+
+      "\n\nПодборка на сайте: "+location.href+"\nТелефон: (8332) 651-310";
+    copyText(e.currentTarget,text,"Скопировать список со ссылками");
+  });
+  document.getElementById("pickShare").addEventListener("click",e=>copyText(e.currentTarget,location.href,"Скопировать ссылку на подборку"));
+
+  tbody.addEventListener("click",e=>{
+    const c=e.target.closest(".cell"); if(!c||c.disabled) return;
+    const k=c.dataset.k; sel.has(k)?sel.delete(k):sel.add(k); render();
+  });
+  document.getElementById("cart").addEventListener("click",e=>{
+    const r=e.target.closest("[data-rm]"); if(!r) return; sel.delete(r.dataset.rm); render();
+  });
+  document.querySelectorAll(".chip[data-f]").forEach(ch=>ch.addEventListener("click",()=>{
+    filter=ch.dataset.f;
+    document.querySelectorAll(".chip[data-f]").forEach(x=>x.setAttribute("aria-pressed",String(x===ch)));
+    renderGrid();
+  }));
+  document.querySelectorAll("[data-copy]").forEach(btn=>btn.addEventListener("click",()=>{
+    const el=document.getElementById(btn.dataset.copy), t=el.textContent;
+    const done=()=>{btn.textContent="скопировано";setTimeout(()=>btn.textContent="копировать",1500)};
+    try{navigator.clipboard.writeText(t).then(done,()=>selectText(el))}catch(_){selectText(el)}
+  }));
+  function selectText(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+
+  const status=document.getElementById("status"), msg=document.getElementById("msg");
+  function say(t){msg.textContent=t;msg.classList.add("show")}
+
+  document.getElementById("order").addEventListener("submit",async e=>{
+    e.preventDefault();
+    const name=document.getElementById("f-name").value.trim();
+    const company=document.getElementById("f-company").value.trim();
+    const phone=document.getElementById("f-phone").value.trim();
+    if(!name||phone.replace(/\D/g,"").length<6){say("Укажите контактное лицо и телефон, чтобы менеджер мог перезвонить.");return}
+    if(!ready||!sel.size) return;
+    const btn=document.getElementById("submit"); btn.disabled=true; btn.textContent="Отправляем…";
+    const keys=[...sel].sort();
+    const items=keys.map(k=>{const [id,mk]=k.split("_"),b=byId[id],m=months.find(x=>x.key===mk);return {key:k,board:b.code,addr:b.addr,side:b.side,month:m?m.full:mk,price:b.price}});
+    const total=items.reduce((s,it)=>s+it.price,0);
+    const okText="Заявка принята: "+items.length+" мес."+(total?", "+fmt(total)+" по прайсу":"")+". Менеджер перезвонит, чтобы подтвердить бронь и согласовать макет.";
+    try{
+      if(!API_URL){
+        demoAdd(keys); keys.forEach(k=>busy.add(k)); sel.clear();
+        say(okText+" (Демо-режим: заявка сохранена только в этом браузере.)");
+        document.getElementById("order").reset();
+        return;
+      }
+      const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({name,company,phone,website:document.getElementById("f-website").value,items})});
+      const j=await r.json();
+      if(j.ok){
+        keys.forEach(k=>busy.add(k)); sel.clear();
+        say(okText+(j.order?" Номер заявки: "+j.order+".":""));
+        document.getElementById("order").reset();
+      }else if(j.error==="taken"){
+        (j.taken||[]).forEach(k=>{sel.delete(k);busy.add(k)});
+        say("Часть месяцев только что заняли, они убраны из заявки. Проверьте заявку и отправьте её ещё раз.");
+      }else{
+        say("Проверьте имя и телефон и отправьте заявку ещё раз.");
+      }
+    }catch(_){
+      say("Не удалось отправить заявку. Проверьте интернет и попробуйте ещё раз или позвоните по номеру (8332) 651-310.");
+    }finally{
+      btn.textContent="Забронировать"; render();
+    }
+  });
+
+  async function loadBusy(){
+    if(!API_URL){
+      busy=new Set(demoGet()); ready=true;
+      status.textContent="Демо-режим: заявки не отправляются";
+    }else{
+      try{
+        const r=await fetch(API_URL+"?action=slots");
+        const j=await r.json();
+        busy=new Set(j.busy||[]); ready=true;
+        status.textContent="● Занятость актуальна";
+      }catch(_){
+        status.textContent="Не удалось загрузить занятость, звоните (8332) 651-310";
+      }
+    }
+    RESERVED.forEach(k=>busy.add(k));
+    [...sel].forEach(k=>{if(busy.has(k))sel.delete(k)});
+    render();
+  }
+
+  readHash(); renderHead(); render(); initMap(); loadBusy();
+  setInterval(()=>{if(!document.hidden)loadBusy()},60000);
+})();
+</script>
+<script>
+// ===== Сцена со щитом-призматроном =====
+(function(){
+  const stage=document.getElementById("stage"), face=document.getElementById("bbFace"), scene=document.getElementById("scene");
+  if(!stage||!face) return;
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const N=window.innerWidth<640?12:20;               // число трёхгранных планок
+  const slats=[], faces=[];
+  for(let i=0;i<N;i++){
+    const s=document.createElement("div"); s.className="slat";
+    for(let k=0;k<3;k++){const f=document.createElement("div");f.className="pf";s.appendChild(f);faces.push({el:f,i,k})}
+    face.appendChild(s); slats.push(s);
+  }
+
+  // --- постеры рисуются на canvas, чтобы каждую планку можно было «нарезать» из одной картинки
+  const PW=1800, PH=900;
+  function fit(ctx,text,font,maxW,start){let s=start;do{ctx.font=font.replace("%",s+"px");s-=4}while(ctx.measureText(text).width>maxW&&s>10);return s+4}
+  function poster(kind){
+    const c=document.createElement("canvas");c.width=PW;c.height=PH;const x=c.getContext("2d");
+    const D='"Unbounded","Arial Black",sans-serif', M='"JetBrains Mono",Consolas,monospace', B='"Onest",Arial,sans-serif';
+    const ink=kind===1?"#0a0a0a":"#ffffff", paper=kind===1?"#ffffff":"#0a0a0a";
+    x.fillStyle=paper;x.fillRect(0,0,PW,PH);x.fillStyle=ink;x.strokeStyle=ink;x.textBaseline="alphabetic";
+    const locs=(document.getElementById("factLocs")||{}).textContent||"290";
+    const sides=(document.getElementById("factSides")||{}).textContent||"782";
+    if(kind===0){
+      x.font="600 34px "+M; x.fillText("НАРУЖНАЯ РЕКЛАМА · КИРОВ",110,150);
+      x.textAlign="right"; x.fillText("6×3",PW-110,150); x.textAlign="left";
+      const s=fit(x,"ГРЕЙХАУНД","900 % "+D,PW-220,300); x.font="900 "+s+"px "+D; x.fillText("ГРЕЙХАУНД",110,PH/2+s*0.36);
+      x.lineWidth=6; x.beginPath(); x.moveTo(110,PH-190); x.lineTo(PW-110,PH-190); x.stroke();
+      x.font="600 34px "+M; x.fillText("С 2000 ГОДА",110,PH-110); x.textAlign="right"; x.fillText("(8332) 651-310",PW-110,PH-110); x.textAlign="left";
+    }else if(kind===1){
+      x.font="900 380px "+D; x.fillText("2000",100,560);
+      x.font="600 56px "+B; x.fillText("год, с которого мы на улицах Кирова",110,680);
+      x.lineWidth=6; x.beginPath(); x.moveTo(110,750); x.lineTo(PW-110,750); x.stroke();
+      x.font="600 34px "+M; x.fillText(locs+" КОНСТРУКЦИЙ · "+sides+" ПОВЕРХНОСТИ · 13 ГОРОДОВ",110,820);
+    }else{
+      for(let y=0;y<PH;y+=60){x.fillStyle=y%120?"#0a0a0a":"#141414";x.fillRect(0,y,PW,60)}
+      x.fillStyle=ink;
+      x.font="600 34px "+M; x.fillText("ЭТО МЕСТО СВОБОДНО",110,150);
+      const s=fit(x,"ЗДЕСЬ МОЖЕТ БЫТЬ","900 % "+D,PW-220,170);
+      x.font="900 "+s+"px "+D; x.fillText("ЗДЕСЬ МОЖЕТ БЫТЬ",110,420); x.fillText("ВАША РЕКЛАМА",110,420+s*1.08);
+      x.font="600 34px "+M; x.fillText("ЗАБРОНИРУЙТЕ НИЖЕ ↓",110,PH-110);
+    }
+    return c.toDataURL("image/png");
+  }
+  function paintPosters(){
+    const urls=[poster(0),poster(1),poster(2)];
+    faces.forEach(f=>{f.el.style.backgroundImage="url("+urls[f.k]+")"});
+  }
+
+  const GROUND=0.86;                                 // линия земли, доля высоты экрана
+  // --- геометрия: каждая планка — треугольная призма, грани повёрнуты на 0/120/240°
+  let W=0,H=0;
+  function layout(){
+    W=face.clientWidth; H=face.clientHeight; const w=W/N, r=w/(2*Math.tan(Math.PI/3));
+    faces.forEach(f=>{
+      f.el.style.transform="rotateY("+(f.k*120)+"deg) translateZ("+r+"px)";
+      f.el.style.backgroundSize=W+"px "+H+"px";
+      f.el.style.backgroundPosition=(-f.i*w)+"px 0";
+    });
+    slats.forEach(s=>s.dataset.r=r);
+    // опора доходит ровно до линии земли
+    const pole=scene.querySelector(".bb-pole"), sticky=stage.querySelector(".stage-sticky");
+    if(pole&&sticky){
+      const topPx=parseFloat(getComputedStyle(scene).top)||sticky.clientHeight*0.42;
+      const poleTop=topPx+scene.offsetHeight/2+22;
+      pole.style.height=Math.max(40,sticky.clientHeight*GROUND-poleTop)+"px";
+    }
+    drawSky(); tick();
+  }
+
+  // --- силуэт города на фоне
+  const sky=document.getElementById("skyline");
+  function drawSky(){
+    if(!sky) return;
+    const dpr=Math.min(window.devicePixelRatio||1,2), w=sky.clientWidth, h=sky.clientHeight;
+    sky.width=w*dpr; sky.height=h*dpr; const x=sky.getContext("2d"); x.scale(dpr,dpr); x.clearRect(0,0,w,h);
+    const cs=getComputedStyle(document.documentElement), soft=cs.getPropertyValue("--soft").trim()||"#f2f2f2", line=cs.getPropertyValue("--line").trim()||"#d9d9d9", fg=cs.getPropertyValue("--fg").trim()||"#0a0a0a";
+    const ground=h*GROUND; let seed=7; const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+    for(let px=-10;px<w;){
+      const bw=40+rnd()*90, bh=h*(0.08+rnd()*0.24);
+      x.fillStyle=soft; x.fillRect(px,ground-bh,bw-6,bh);
+      x.fillStyle=line;
+      for(let wy=ground-bh+14;wy<ground-10;wy+=18) for(let wx=px+8;wx<px+bw-16;wx+=14) if(rnd()>0.55) x.fillRect(wx,wy,5,7);
+      px+=bw;
+    }
+    x.fillStyle=fg; x.fillRect(0,ground,w,2);
+  }
+
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  const PHASES=[[0.06,0.22],[0.26,0.42],[0.46,0.6]];   // три поворота: постер 2, постер 3, снова постер 1
+  const count=document.getElementById("stageCount"), fade=document.getElementById("stageFade"), skyBox=document.querySelector(".sky");
+  const ui=document.querySelector(".stage-ui");
+  function tick(){
+    if(reduce){slats.forEach(s=>s.style.transform="translateZ("+(-s.dataset.r)+"px)");return}
+    const total=stage.offsetHeight-window.innerHeight;
+    const p=clamp(-stage.getBoundingClientRect().top/Math.max(total,1),0,1);
+    let shown=0;
+    slats.forEach((s,i)=>{
+      let a=0;
+      PHASES.forEach(([a0,a1])=>{const st=a0+(i/N)*0.05, d=(a1-a0)-0.05; a+=120*ease(clamp((p-st)/d,0,1))});
+      s.style.transform="translateZ("+(-s.dataset.r)+"px) rotateY("+(-a)+"deg)";
+      if(i===Math.floor(N/2)) shown=Math.round(a/120)%3;
+    });
+    if(count) count.textContent="0"+(shown+1)+" / 03";
+    // наезд камеры: постер растёт, пока не закроет экран
+    const z=ease(clamp((p-0.66)/0.3,0,1));
+    const k=Math.max(window.innerWidth/Math.max(W,1),window.innerHeight/Math.max(H,1))*1.08;
+    const dy=(0.5-0.42)*window.innerHeight*z;
+    scene.style.transform="translateY("+dy+"px) scale("+(1+(k-1)*z)+")";
+    if(skyBox){skyBox.style.opacity=String(1-z);skyBox.style.transform="translateY("+(p*40)+"px) scale("+(1+z*0.3)+")"}
+    if(ui) ui.style.opacity=String(1-clamp(z*3,0,1));
+    if(fade) fade.style.opacity=String(clamp((p-0.93)/0.07,0,1));
+  }
+
+  // --- бегущая строка: едет сама и ускоряется от прокрутки
+  const track=document.getElementById("ticker");
+  let off=0,lastY=window.scrollY;
+  function loop(){
+    const y=window.scrollY, v=Math.abs(y-lastY); lastY=y;
+    if(track&&track.scrollWidth){off+=0.5+Math.min(v,80)*0.35; const half=track.scrollWidth/2; track.style.transform="translateX("+(-(off%half))+"px)"}
+    requestAnimationFrame(loop);
+  }
+
+  let raf=0;
+  window.addEventListener("scroll",()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;tick()})},{passive:true});
+  window.addEventListener("resize",layout);
+  document.addEventListener("themechange",drawSky);
+  if(window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",drawSky);
+  paintPosters(); layout();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{paintPosters()});
+  if(!reduce) requestAnimationFrame(loop);
+
+  // --- «поклейка» разделов при появлении на экране
+  const targets=document.querySelectorAll(".hero > div:first-child, .facts, .sec-head, .map-layout, .rules, .big-year, .timeline, .contacts");
+  targets.forEach(el=>el.classList.add("reveal"));
+  if(reduce){targets.forEach(el=>el.classList.add("in"));return}
+  let pending=[...targets];
+  function checkReveal(){
+    if(!pending.length) return;
+    const lim=window.innerHeight*0.92;
+    pending=pending.filter(el=>{const r=el.getBoundingClientRect();if(r.top<lim&&r.bottom>0){el.classList.add("in");return false}return r.bottom<=0?(el.classList.add("in"),false):true});
+  }
+  window.addEventListener("scroll",()=>requestAnimationFrame(checkReveal),{passive:true});
+  window.addEventListener("resize",checkReveal);
+  checkReveal(); setTimeout(checkReveal,300);
+})();
+</script>
+</body>
+</html>
