@@ -1570,9 +1570,21 @@ footer{border-top:1px solid var(--fg);padding-block:40px}
         document.getElementById("order").reset();
         return;
       }
-      const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-        body:JSON.stringify({name,company,phone,website:document.getElementById("f-website").value,items})});
-      const j=await r.json();
+      say("Отправляем заявку. Это может занять до 30 секунд, не закрывайте страницу.");
+      let j;
+      try{
+        const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+          body:JSON.stringify({name,company,phone,website:document.getElementById("f-website").value,items})});
+        if(!r.ok) throw new Error("HTTP "+r.status);
+        j=await r.json();
+      }catch(postErr){
+        // ответ не дошёл — проверяем, записалась ли заявка (повторно не отправляем, чтобы не задвоить)
+        say("Связь медленная, проверяем, дошла ли заявка…");
+        const s=await fetchJSON(API_URL+"?action=slots",{cache:"no-store"},3);
+        const now=new Set(s.busy||[]);
+        if(keys.every(k=>now.has(k))) j={ok:true};
+        else throw postErr;
+      }
       if(j.ok){
         keys.forEach(k=>busy.add(k)); sel.clear();
         say(okText+(j.order?" Номер заявки: "+j.order+".":""));
@@ -1590,25 +1602,41 @@ footer{border-top:1px solid var(--fg);padding-block:40px}
     }
   });
 
+  // Сервер заявок (Google Apps Script) из России иногда отвечает 5–30 секунд или с первого раза выдаёт ошибку.
+  // Поэтому: повторяем запрос, показываем последнюю известную занятость и не блокируем бронь —
+  // при отправке сервер всё равно сам проверяет, свободен ли месяц.
+  const BUSY_CACHE="greyhound-busy-cache";
+  try{const c=JSON.parse(localStorage.getItem(BUSY_CACHE)||"null");if(c&&Array.isArray(c.busy))c.busy.forEach(k=>busy.add(k))}catch(_){}
+  async function fetchJSON(url,opts,tries){
+    let last;
+    for(let i=0;i<tries;i++){
+      try{const r=await fetch(url,opts);if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}
+      catch(e){last=e;await new Promise(z=>setTimeout(z,1500*(i+1)))}
+    }
+    throw last;
+  }
+  let loading=false;
   async function loadBusy(){
     if(!API_URL){
       busy=new Set(demoGet()); ready=true;
       status.textContent="Демо-режим: заявки не отправляются";
     }else{
+      if(loading) return; loading=true;
+      ready=true;
+      if(!status.textContent.startsWith("●")) status.textContent="Обновляем занятость…";
       try{
-        const r=await fetch(API_URL+"?action=slots");
-        const j=await r.json();
-        busy=new Set(j.busy||[]); ready=true;
+        const j=await fetchJSON(API_URL+"?action=slots",{cache:"no-store"},3);
+        busy=new Set(j.busy||[]);
+        try{localStorage.setItem(BUSY_CACHE,JSON.stringify({busy:j.busy||[],at:Date.now()}))}catch(_){}
         status.textContent="● Занятость актуальна";
       }catch(_){
-        status.textContent="Не удалось загрузить занятость, звоните (8332) 651-310";
-      }
+        status.textContent="Занятость обновится позже. Бронировать можно, свободен ли месяц, проверим при отправке";
+      }finally{loading=false}
     }
     RESERVED.forEach(k=>busy.add(k));
     [...sel].forEach(k=>{if(busy.has(k))sel.delete(k)});
     render();
   }
-
   readHash(); renderHead(); render(); initMap(); loadBusy();
   setInterval(()=>{if(!document.hidden)loadBusy()},60000);
 })();
