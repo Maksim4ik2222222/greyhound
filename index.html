@@ -46,14 +46,14 @@ nav a:hover{color:var(--fg)}
 body,header.top,.board .face,.cell,.chip,.cta{transition:background-color .2s,color .2s,border-color .2s}
 
 /* stage: щит-призматрон. При прокрутке планки поворачиваются, затем «камера» наезжает на постер */
-.stage{height:360vh;position:relative;border-top:0;padding:0}
-.stage-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--bg)}
+.stage{height:100vh;height:100svh;position:relative;border-top:0;padding:0}
+.stage-sticky{position:relative;height:100%;overflow:hidden;background:var(--bg)}
 .sky{position:absolute;inset:0;will-change:transform}
 .sky canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .scene{position:absolute;left:50%;top:42%;width:min(80vw,900px);translate:-50% -50%;transform-origin:50% 50%;will-change:transform}
 .bb-frame{position:relative;aspect-ratio:2/1;border:clamp(4px,.7vw,8px) solid var(--fg);background:#0a0a0a}
 .bb-face{position:absolute;inset:0;display:flex;perspective:1800px;overflow:hidden}
-.slat{position:relative;flex:1 0 0;height:100%;transform-style:preserve-3d}
+.slat{position:relative;flex:1 0 0;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.65,0,.25,1)}
 .pf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background-repeat:no-repeat}
 .bb-deck{position:absolute;left:-3%;right:-3%;top:100%;margin-top:8px;height:12px;border:2px solid var(--fg);border-top-width:3px;background:repeating-linear-gradient(90deg,var(--fg) 0 2px,transparent 2px 16px)}
 .bb-pole{position:absolute;left:50%;top:100%;margin-top:22px;width:clamp(16px,2.6vw,30px);height:40vh;translate:-50% 0;background:var(--fg)}
@@ -218,7 +218,6 @@ footer{border-top:1px solid var(--fg);padding-block:40px}
 @media (max-width:860px){
   .hero{grid-template-columns:1fr;gap:32px;padding-block:40px}
   .scene{width:88vw;top:40%}
-  .stage{height:300vh}
   .book-panel{grid-template-columns:1fr}
   .rules{grid-template-columns:1fr}
   .rules div{border-right:0;border-bottom:1px solid var(--line)}
@@ -264,7 +263,7 @@ footer{border-top:1px solid var(--fg);padding-block:40px}
         <div class="bb-pole"></div>
       </div>
       <div class="stage-ui">
-        <span class="label">Листайте вниз</span>
+        <span class="label">Листайте вниз — к карте щитов</span>
         <span class="stage-count num" id="stageCount">01 / 03</span>
       </div>
       <div class="stage-fade" id="stageFade"></div>
@@ -1705,29 +1704,35 @@ footer{border-top:1px solid var(--fg);padding-block:40px}
 
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-  const PHASES=[[0.06,0.22],[0.26,0.42],[0.46,0.6]];   // три поворота: постер 2, постер 3, снова постер 1
+  // Призматрон крутится сам (по таймеру) и сразу поворачивается, когда начинаешь листать.
+  // Страница при этом прокручивается как обычно — щит ничего не задерживает.
   const count=document.getElementById("stageCount"), fade=document.getElementById("stageFade"), skyBox=document.querySelector(".sky");
   const ui=document.querySelector(".stage-ui");
+  let step=0, lastFlip=Date.now();
+  slats.forEach((s,i)=>{s.style.transitionDelay=(i*28)+"ms"});
+  function setSlats(){
+    slats.forEach(s=>{s.style.transform="translateZ("+(-s.dataset.r)+"px) rotateY("+(-step*120)+"deg)"});
+    if(count) count.textContent="0"+(step%3+1)+" / 03";
+  }
+  function flip(){step++;lastFlip=Date.now();setSlats()}
   function tick(){
-    if(reduce){slats.forEach(s=>s.style.transform="translateZ("+(-s.dataset.r)+"px)");return}
-    const total=stage.offsetHeight-window.innerHeight;
-    const p=clamp(-stage.getBoundingClientRect().top/Math.max(total,1),0,1);
-    let shown=0;
-    slats.forEach((s,i)=>{
-      let a=0;
-      PHASES.forEach(([a0,a1])=>{const st=a0+(i/N)*0.05, d=(a1-a0)-0.05; a+=120*ease(clamp((p-st)/d,0,1))});
-      s.style.transform="translateZ("+(-s.dataset.r)+"px) rotateY("+(-a)+"deg)";
-      if(i===Math.floor(N/2)) shown=Math.round(a/120)%3;
-    });
-    if(count) count.textContent="0"+(shown+1)+" / 03";
-    // наезд камеры: постер растёт, пока не закроет экран
-    const z=ease(clamp((p-0.66)/0.3,0,1));
-    const k=Math.max(window.innerWidth/Math.max(W,1),window.innerHeight/Math.max(H,1))*1.08;
-    const dy=(0.5-0.42)*window.innerHeight*z;
-    scene.style.transform="translateY("+dy+"px) scale("+(1+(k-1)*z)+")";
-    if(skyBox){skyBox.style.opacity=String(1-z);skyBox.style.transform="translateY("+(p*40)+"px) scale("+(1+z*0.3)+")"}
+    setSlats();
+    if(reduce) return;
+    // пока экран со щитом уходит вверх, щит немного «наезжает» и растворяется
+    const z=clamp(window.scrollY/(window.innerHeight*0.9),0,1);
+    scene.style.transform="translateY("+(z*window.innerHeight*0.12)+"px) scale("+(1+z*0.55)+")";
+    if(skyBox){skyBox.style.opacity=String(1-z*0.9);skyBox.style.transform="translateY("+(z*60)+"px)"}
     if(ui) ui.style.opacity=String(1-clamp(z*3,0,1));
-    if(fade) fade.style.opacity=String(clamp((p-0.93)/0.07,0,1));
+    if(fade) fade.style.opacity=String(clamp((z-0.55)/0.45,0,1)*0.85);
+  }
+  if(!reduce){
+    setInterval(()=>{if(!document.hidden&&Date.now()-lastFlip>2400)flip()},600);
+    let scrolling=false;
+    window.addEventListener("scroll",()=>{
+      if(!scrolling&&window.scrollY<window.innerHeight&&Date.now()-lastFlip>900){flip()}
+      scrolling=true; clearTimeout(window.__ghScroll); window.__ghScroll=setTimeout(()=>{scrolling=false},250);
+    },{passive:true});
+    window.addEventListener("wheel",e=>{if(e.deltaY>0&&window.scrollY<window.innerHeight&&Date.now()-lastFlip>900)flip()},{passive:true});
   }
 
   // --- бегущая строка: едет сама и ускоряется от прокрутки
