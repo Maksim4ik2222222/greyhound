@@ -378,6 +378,7 @@ footer{border-top:1px solid var(--fg);padding-block:40px}
           <label for="f-name">Контактное лицо<input id="f-name" name="name" autocomplete="name" required placeholder="Иван Петров"></label>
           <label for="f-company">Компания<input id="f-company" name="company" autocomplete="organization" placeholder="ООО «Вятка»"></label>
           <label for="f-phone">Телефон<input id="f-phone" name="phone" type="tel" autocomplete="tel" required placeholder="+7 912 000-00-00"></label>
+          <label for="f-email">Электронная почта<input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="name@company.ru"></label>
           <div class="hp" aria-hidden="true"><label for="f-website">Сайт<input id="f-website" name="website" tabindex="-1" autocomplete="off"></label></div>
           <button class="cta" type="submit" id="submit" disabled>Забронировать</button>
           <div class="msg" id="msg" role="status"></div>
@@ -1556,7 +1557,9 @@ footer{border-top:1px solid var(--fg);padding-block:40px}
     const name=document.getElementById("f-name").value.trim();
     const company=document.getElementById("f-company").value.trim();
     const phone=document.getElementById("f-phone").value.trim();
+    const email=document.getElementById("f-email").value.trim();
     if(!name||phone.replace(/\D/g,"").length<6){say("Укажите контактное лицо и телефон, чтобы менеджер мог перезвонить.");return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){say("Укажите электронную почту, например name@company.ru. Она нужна, чтобы менеджер мог прислать подтверждение брони.");document.getElementById("f-email").focus();return}
     if(!ready||!sel.size) return;
     const btn=document.getElementById("submit"); btn.disabled=true; btn.textContent="Отправляем…";
     const keys=[...sel].sort();
@@ -1574,7 +1577,7 @@ footer{border-top:1px solid var(--fg);padding-block:40px}
       let j;
       try{
         const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-          body:JSON.stringify({name,company,phone,website:document.getElementById("f-website").value,items})});
+          body:JSON.stringify({name,company,phone,email,website:document.getElementById("f-website").value,items})});
         if(!r.ok) throw new Error("HTTP "+r.status);
         j=await r.json();
       }catch(postErr){
